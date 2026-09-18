@@ -23,54 +23,33 @@ int main(void) {
 	printf("Ordenando tablero");
 
 	for(int i=0;i < 5;i++){
-
 	        printf(".");
 		fflush(stdout);
 		usleep(300000);
 	}
 	
-	int vueltas = 0;
+
 	mascara(tablero);
 	turno = 1;
 
+	printf("\n");
 	// gameloop
 	do {
-		vueltas++;
-		printf("Vuelta numero: %d \n", vueltas);
-		printf("------------TURNO DEL JUGADOR: %d ------------- \n", turno);
+		printf("\n -------TURNO DEL JUGADOR: %d ------- \n", turno);
 		printf("Ingrese posicion: ");
+
 		do {
-			printf("VALOR DE POSICION ANTES DE LEER: %d \n", posicion);
 			scanf("%d", &posicion);
-			break;
+			if (posicion < 1 || posicion > COLUMNAS) {
+
+			}
+
 		}while(posicion < 1 || posicion > COLUMNAS);
 
-
 		ingresarFichas(tablero, turno, posicion);
-				
-/*
-	for( int i = 0; i<FILAS; i++) {
 
-		
-		printf("\n |");
-
-		for(int j = 0; j<COLUMNAS; j++) {
-			
-			printf("%d", tablero[i][j]);
-	
-			printf("|");
-
-		}
-
-		printf("\n");
-	}
-*/
-		
-
-		printf("VALOR DE POSICION DESPUES DE LLAMAR A ingresarFichas(): %d \n", posicion);	
-		mascara(tablero);
 		turno = calcularTurno(turno);
-
+		mascara(tablero);
 	}while(posicion != 7);
 
 	
@@ -117,27 +96,38 @@ void mascara(int inputMatriz[][COLUMNAS]) {
 
 	int i, j;
 
+	
+	
+	printf("\n");
 	for(i = 0; i<FILAS; i++) {
 
 		
-		printf("\n |");
+		printf("\t |");
 
 		for(j = 0; j<COLUMNAS; j++) {
 
 			if (inputMatriz[i][j] == 0) {
 				printf(" ");
 			} else if (inputMatriz[i][j] == 1){
-				printf("X");
+				printf("\x1b[31mX\x1b[37m");
 			} else {
-				printf("O");
+				printf("\x1b[32mO\x1b[37m");
 			}
 			printf("|");
 
 		}
 
 		printf("\n");
+		
 	}
+	printf("\t --------------- \n");
+	printf("\t |");
+	for (int k = 0 ; k<COLUMNAS ; k++) {
 
+		printf("%d|", k);
+
+	}
+	printf("\n");
 	return;
 
 }
