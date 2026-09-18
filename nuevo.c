@@ -61,7 +61,7 @@ int main(void) {
 
 	cargaMatriz(tablero);
 	pantallaCarga();
-
+	printf("Para salir del juego en cualquier momento, ingrese -1 \n");
 	mascara(tablero);
 	turno = 1;
 
@@ -74,9 +74,17 @@ int main(void) {
 
 		do {
 			scanf("%d", &posicion);
-			if (posicion < 1 || posicion > COLUMNAS) {
-
+		
+			if (posicion == -1) {
+				posicion = -93;
 			}
+
+
+			if (posicion < 1 || posicion > COLUMNAS) {	
+				printf("Ingrese una posicion valida! \n Entre 1 y %d \n", COLUMNAS);
+				printf
+			} 
+			
 
 		}while(posicion < 1 || posicion > COLUMNAS);
 
@@ -84,7 +92,11 @@ int main(void) {
 
 		turno = calcularTurno(turno);
 		mascara(tablero);
-	}while(posicion != 7);
+		if (victoria(tablero)) {
+			posicion = -93;
+		}
+
+	}while(posicion == -93);
 
 	
 	return 0;
@@ -199,9 +211,7 @@ void mascara(int inputMatriz[][COLUMNAS]) {
 
 }
 
-bool victoria(int m[][6], int orden) {
-
-	
+bool victoria(int m[][COLUMNAS]) {
 	
 	// recorrido horizontal
 
@@ -213,12 +223,12 @@ bool victoria(int m[][6], int orden) {
 	int inicio	= 0;
 	int k 		= 0; // <-- borrar para entrega
 
-	for (i=0;i<orden && !victoria;i++) {
+	for (i=0;i<FILAS && !victoria;i++) {
 
 		c1 	= 0;
 		c2 	= 0;
 
-		for (j=0;j<orden;j++) {
+		for (j=0;j<FILAS;j++) {
 
 			if (m[i][j] != 0 && m[i][j] == 1) {
 
@@ -259,7 +269,7 @@ bool victoria(int m[][6], int orden) {
 				victoria = true;
 				printf("[VICTORIA_F]: La siguiente fila cumple con la condicion de victoria: \n");
 
-				for (k=0;k<orden; k++) {
+				for (k=0;k<FILAS; k++) {
 
 					printf("%d \t", m[i][k]);
 
@@ -283,9 +293,9 @@ bool victoria(int m[][6], int orden) {
 	i = 0;
 	k = 0;
 
-	for (i=0;i<orden && !victoria;i++) {
+	for (i=0;i<FILAS && !victoria;i++) {
 
-		for (j=0;j<orden;j++) {
+		for (j=0;j<COLUMNAS;j++) {
 
 			if (m[j][i] != 0 && m[j][i] == 1 ) {
 
@@ -325,7 +335,7 @@ bool victoria(int m[][6], int orden) {
 		if (c1 >= 4 || c2 >= 4) {
 			victoria = true;
 			printf("Condicion de victoria dentro de una COLUMNA \n");
-			for (k=0;k<orden;k++) {
+			for (k=0;k<COLUMNAS;k++) {
 				printf("Fila %d: %d \n", k, m[k][i]);
 			}
 		}
@@ -338,7 +348,8 @@ bool victoria(int m[][6], int orden) {
 
 	c1 	= 0;
 	c2 	= 0;
-
+	
+/*
 	while(flag) {
 
 		for (i=inicio;i<control;i++) {
@@ -351,7 +362,7 @@ bool victoria(int m[][6], int orden) {
 
 		}
 	}
-
+*/	
 	return victoria;
 
 }
