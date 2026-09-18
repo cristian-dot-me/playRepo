@@ -1,0 +1,48 @@
+#include <stdio.h>
+#include <string.h>
+
+typedef struct {
+    int idplayer;
+    char Player[10];
+    char Password[11];
+    int Streak;
+    int Victory;
+    int PMatches;
+    int GameCount;
+}Player;
+void Vstring(char *ImputStr) {
+    do {
+        fgets(ImputStr,11,stdin);
+        if (strlen(ImputStr)==0) {
+            printf("!! ERROR !!");
+            printf("!!Campo Vacio!!");
+            printf("Ingrese nueva mente el campo");
+
+        }
+    } while (strlen(ImputStr)==0);
+
+}
+int main(void) {
+    int CantPlayers;
+    int Bandera;
+    //CANTIDAD DE JUGADORES A INGRESAR AL JUEGO"
+    do {
+        printf("Ingrese Cantidades de Jugadores");
+        scanf("%d",&CantPlayers);
+    }while (CantPlayers<2 && CantPlayers>900);
+    // DEFINIMOS EL VECTOR DE JUGADORES
+    Player Players[CantPlayers];
+    //VALIDACION de ingreso de id,usuario y contraseña
+    for (int i = 0; i < CantPlayers; ++i) {
+        do {
+           printf("Ingrese Id del Jugador %d :",i);
+            scanf("%d",Players[i].idplayer);
+        } while (Players[i].idplayer<100 && Players[i].idplayer>999);
+        printf("-----------------------------");
+        printf("Igrese nombre del usuarioa:");
+           Vstring(Players[i].Player);
+        printf("Ingrese Contraseña del Usuario;");
+          Vstring(Players[i].Password);
+    } 
+        return 0;
+}
