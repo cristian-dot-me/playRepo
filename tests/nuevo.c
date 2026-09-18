@@ -3,6 +3,7 @@
 #include <string.h>
 #include "structs.h"
 #include <unistd.h>
+#include <ctype.h>
 
 #define	FILAS 6
 #define COLUMNAS 7
@@ -36,14 +37,16 @@ int main(void) {
 	int posicion;
 	int cantPlayers;
 	bool estadoVictoria = false;
+	bool enteroValido;
 
 	//CANTIDAD DE JUGADORES A INGRESAR AL JUEGO"                      
-	do {                                                              
-		printf("Ingrese cantidad de jugadores: ");                    
-		scanf("%d",&cantPlayers);                                     
 
-	} while (cantPlayers<2 || cantPlayers>900);                        
-                                                                  
+	printf("Ingrese cantidad de jugadores: ");  
+
+	
+//me voy a matar	
+
+                               
 	// DEFINIMOS EL VECTOR DE JUGADORES                               
 	PLAYERS players[cantPlayers];                                      
                                                                   
@@ -52,7 +55,7 @@ int main(void) {
 
 		do {                                                          
 
-			getchar();
+//			getchar();
 			printf("Ingrese ID del jugador %d: ", i+1);                   
 
 			scanf("%d", &players[i].idplayer);
