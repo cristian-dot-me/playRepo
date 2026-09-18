@@ -10,16 +10,16 @@ typedef struct {
     int PMatches;
     int GameCount;
 }Player;
-void Vstring(char *ImputStr) {
+void Vstring(char *InputStr) {
     do {
-        fgets(ImputStr,11,stdin);
-        if (strlen(ImputStr)==0) {
+        fgets(InputStr,11,stdin);
+        if (strlen(InputStr)==0) {
             printf("!! ERROR !!");
             printf("!!Campo Vacio!!");
             printf("Ingrese nueva mente el campo");
 
         }
-    } while (strlen(ImputStr)==0);
+    } while (strlen(InputStr)==0);
 
 }
 int main(void) {
@@ -39,10 +39,9 @@ int main(void) {
             scanf("%d",Players[i].idplayer);
         } while (Players[i].idplayer<100 && Players[i].idplayer>999);
         printf("-----------------------------");
-        printf("Igrese nombre del usuarioa:");
+        printf("Ingrese nombre del usuarioa:");
            Vstring(Players[i].Player);
         printf("Ingrese Contraseña del Usuario;");
           Vstring(Players[i].Password);
-    } 
+    }
         return 0;
-}
