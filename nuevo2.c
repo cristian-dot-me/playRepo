@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
-//#include "structs.h"
+//#include "structs.h" 
+#include <ctype.h>
 #include <unistd.h>
+#include <stdlib.h>
 
 #define	FILAS 6
 #define COLUMNAS 7
@@ -19,6 +21,7 @@ typedef struct {
 
 }PLAYERS;
 
+void vaciarStdin();
 int validarID(int id,PLAYERS players[],int cantPlayers);
 int validarString(char *InputStr);
 int calcularTurno(int turnoInput);
@@ -35,85 +38,111 @@ int main(void) {
 	int turno;
 	int posicion;
 	int cantPlayers;
-	int valido;
+	int estadoLectura;
+	char auxCantPlayers[10];
+	unsigned int valido;
+	bool esDigito = true;
 	//----------------------auxiliares para la carga del jugador---------------
 	int id;
+	char aux[11];                              //Char para validar las cadenas
 
-	char aux[11];                              //Char para validad las cadenas
 	bool estadoVictoria = false;
 
 	//CANTIDAD DE JUGADORES A INGRESAR AL JUEGO"
+
 	do {
+		esDigito = true;
 		printf("Ingrese cantidad de jugadores: ");
 		scanf("%d",&cantPlayers);
+		vaciarStdin();
 
-	} while (cantPlayers<2 || cantPlayers>900);
-	getchar();
+	} while (cantPlayers < 2 || cantPlayers > 900);
+
+
 	// DEFINIMOS EL VECTOR DE JUGADORES
 	PLAYERS players[cantPlayers];
-     printf("\t    --------Registro de jugadores--------- \n ");
-	printf("Porfavor complete los campor para registras a los jugadores \n \n");
+
+
+
+	printf("\t    --------Registro de jugadores--------- \n ");
+	printf("Por favor complete los campor para registras a los jugadores \n \n");
 	printf("----------------------------------------------------------------- \n");
-	//Logeo y validacion de ingreso de id, usuario y contraseña
+
+	//Logueo y validacion de ingreso de id, usuario y contraseña
 	for (int i = 0 ; i < cantPlayers ; ++i) {
 		do {
 
 
 			printf("Ingrese ID del jugador %d: ", i+1);
 
-			scanf("%d", &id);
+			estadoLectura = scanf("%d", &id);
+			vaciarStdin();
+			if (estadoLectura == 0) {
+				printf("No se ha ingresado un valor valido, intente de nuevo \n");
+				id = 0;
+			}
+			
 
+		} while ( (id < 100 || id > 999) || validarID(id,players,cantPlayers));
 
-		} while ((id < 100 || id > 999)|| validarID(id,players,cantPlayers));
+		players[i].idplayer = id;
+//		getchar();
 
-
-
-		players[i].idplayer=id;
-		getchar();
-		//-------------------------------------------- Nombre y contraseña ----------------------------------------------------------
-
-
+		// Nombre y contraseña 
 		printf("Ingrese nombre del usuario: ");
-		fgets(aux,11,stdin);
-		while (getchar() != '\n');
-		valido=validarString(aux);
+
+		fgets(aux, 11, stdin);
+		fflush(stdin);
+		valido = validarString(aux);
+
 		do {
-			if (valido==1) {
+			if (valido == 1) {
+
 				printf("!! ERROR !! \n");
-				printf("!!Campo Vacio!! \n");
+				printf("!! Campo Vacio !! \n");
 				printf("Ingrese nueva mente el campo: ");
 				fgets(aux,11,stdin);
+				fflush(stdin);
+				valido = validarString(aux);
 
 			}
+
 		} while (valido == 1);
-		//-------------------------------se asigna el valor de aux a players.player--------------------------------
+
+		// Se asigna el valor de aux a players.player
 		strcpy(aux,players[i].Player);
-		valido=0;
+
+		valido = 0;
 		printf("Ingrese contraseña del usuario: ");
 		fgets(aux,11,stdin);
-		while (getchar() != '\n');
-		valido=validarString(aux);
+		fflush(stdin);
+
+		valido = validarString(aux);
 		do {
 			if (valido==1) {
 				printf("!! ERROR !! \n");
 				printf("!!Campo Vacio!! \n");
 				printf("Ingrese nueva mente el campo: ");
 				fgets(aux,11,stdin);
+				fflush(stdin);
+				valido = validarString(aux);
 
 			}
 		} while (valido == 1);
-		//-------------------------------se asigna el valor de aux a players.password--------------------------------
+		//Se asigna el valor de aux a players.password
 		strcpy(aux,players[i].Password);
 
 	}
 	getchar();
-	//-------------------------------------------- start----------------------------------------------------------
+
+	// Start
 	cargaMatriz(tablero);
 	pantallaCarga();
 	printf("Para salir del juego en cualquier momento, ingrese -1 \n");
 	mascara(tablero);
 	turno = 1;
 	printf("\n");
+
 	// gameloop
 	do {
 		printf("\n -------TURNO DEL JUGADOR: %d ------- \n", turno);
@@ -125,6 +154,7 @@ int main(void) {
 			if (posicion == -1) {
 				posicion = -93;
 			}
+
 			if (posicion < 1 || posicion > COLUMNAS) {
 				printf("Ingrese una posicion valida! \n Entre 1 y %d \n", COLUMNAS);
 			}
@@ -132,19 +162,32 @@ int main(void) {
 		}while(posicion < 1 || posicion > COLUMNAS);
 
 		ingresarFichas(tablero, turno, posicion);
-        victoria(tablero,turno);
+
+	        victoria(tablero,turno);
+
 		turno = calcularTurno(turno);
+
 		mascara(tablero);
+
 		estadoVictoria = victoria(tablero,turno);
+
 		if (estadoVictoria == true) {
 			posicion = -93;
 		}
 
 	}while(posicion == -93);
 
-
 	return 0;
 }
+
+void vaciarStdin(void) {
+
+	while(getchar() != '\n');
+
+	return;
+
+}
+
 
 int validarString(char *InputStr) {
    int valido;
@@ -154,18 +197,27 @@ int validarString(char *InputStr) {
 	return valido;
 
 }
+
 int validarID(int id,PLAYERS players[],int cantPlayers) {
+
 	int i;
 	int validar;
+
 	for (i = 0; i<cantPlayers; i++) {
+
 		if (id == players[i].idplayer) {
-			printf("error id invalida");
-			printf("id ya existente");
+
+			printf("ID invalida! \n");
+			printf("Esa ID ya existe! \n");
 			validar = 1;
-			i=cantPlayers;
-		}else {
+			i = cantPlayers;
+
+		} else {
+
 			validar = 0;
+
 		}
+
 	}
 	return validar;
 }
