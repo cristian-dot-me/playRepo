@@ -1,12 +1,20 @@
 -------------------------Fixear------------------------
 --Enter residual luego de colocar el nombre de usuario 
+-- enter residual luego de colocar de nuevo por la verificacion de la contraseña 
+-- enter residual en la verificacion de la id
 -- la condicion de -1 para terminar el juego no esta funcionando 
 -------------------------Agregar al programa-------------
---la contraseña tiene un problema: si el limite es 11 y el usuario ingresa una contraseña mayor hay dos opciones 
-1.optar por decirle al usuario que ingrese una contraseña de 11 
-o bien
-2.avisar al usuario que unicamente se tomo los primero 11 caracteres 
-el problema de la segunda es que esta mal visto y no seria correcto para el usuario que el tenga que escribir solo lo 10 caracteres de su contraseña 
+   {--la contraseña tiene un problema: si el limite es 11 y el usuario ingresa una contraseña mayor hay dos opciones 
+    |  1.optar por decirle al usuario que ingrese una contraseña de 11 
+    |  o bien
+    |  2.avisar al usuario que unicamente se tomo los primero 11 caracteres 
+    |  el problema de la segunda es que esta mal visto y no seria correcto para el usuario que el tenga que escribir solo lo 10 caracteres de su contraseña}
+    |
+    |
+    | la contraseña ya quedo con la opcion numero 1
+
+
+
 --validacion de contraseña del usuario
 --pedir el ingreso del nombre del usuario para ubcar su perfil 
 --la validacion de los turnos por ingreso manuel la primera vuelta
