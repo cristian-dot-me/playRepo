@@ -41,7 +41,6 @@ int main(void) {
 	int estadoLectura;
 	char auxCantPlayers[10];
 	unsigned int valido;
-	bool esDigito = true;
 	//----------------------auxiliares para la carga del jugador---------------
 	int id;
 	char aux[11];                              //Char para validar las cadenas
@@ -51,7 +50,6 @@ int main(void) {
 	//CANTIDAD DE JUGADORES A INGRESAR AL JUEGO"
 
 	do {
-		esDigito = true;
 		printf("Ingrese cantidad de jugadores: ");
 		scanf("%d",&cantPlayers);
 		vaciarStdin();
