@@ -1,0 +1,24 @@
+fixeado -> 	antes te dejaba crear usuarios con la misma ID y nombre [X] 
+	->	enter residual al poner la password del segundo usuario [X]
+
+
+cambiado -> 	ahora el input para las ID's se toma con fgets
+		y no con scanf para avisar cuando se mete una ID vacia
+	
+
+agredado->	FUNCION: contieneNumeros() agarra un char y te devuelve
+		VERDADERO si contiene numeros. De lo contrario, devuelve
+		FALSO.
+
+	->	FUNCION: bannerPrincipal() printea un banner re flama
+	
+	->	FUNCION: vaciarStdin() itera hasta encontrar un \n.
+		A diferencia de limpiarSiDesbordo(), este pide un 
+		getchar() si el buffer esta verdaderamente vacio
+		pero funcionan distinto, por que? No se
+
+Arreglar urgente:
+
+	La funcion validarUser() provoca un SEGFAULT en la segunda vuelta 
+	de su loop principal. (Arreglado temporalmente cambiando los valores
+	de salida de la funcion)
