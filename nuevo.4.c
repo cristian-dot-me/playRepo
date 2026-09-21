@@ -25,12 +25,12 @@ int 	validarID(int id,PLAYERS players[],int cantPlayers);
 void 	validarUser(char *inputstr, PLAYERS players[], int cantPlayers, int *validar, int *ub);
 int 	validarString(char *InputStr);
 void 	Passworduser(char *inputstr, char *inputstr2,int cantPlayers,PLAYERS player[]);
-int 	calcularTurno(int turnoInput);
+void 	calcularTurno(int *turnoInput);
 void 	ingresarFichas(int tablero[][COLUMNAS], int turno, int pos);
 void 	mascara(int inputMatriz[][COLUMNAS]);
 void 	cargaMatriz(int inputMatriz[][COLUMNAS]);
 void 	pantallaCarga(void);
-bool 	victoria(int inputMatriz[][COLUMNAS],int turno);
+int 	victoria(int inputMatriz[][COLUMNAS],int turno);
 void	vaciarStdin(void);
 bool 	contieneNumeros(char* inputStr);
 void	bannerPrincipal(void);
@@ -57,7 +57,7 @@ int main(void) {
 	int b1;
 	int b2;
 	bool estadoLectura 	= false;
-	bool estadoVictoria 	= false;
+	int estadoVictoria 	= 0;
 	bool endgame		= false;
 	//CANTIDAD DE JUGADORES A INGRESAR AL JUEGO"
 	bannerPrincipal();
@@ -82,6 +82,7 @@ int main(void) {
 	printf("Por favor complete los campos para registrar a los jugadores \n \n");
 	printf("----------------------------------------------------------------- \n");
 	//Logeo y validacion de ingreso de id, usuario y contraseña
+	goto JUGAR;
 	for (int i = 0 ; i < cantPlayers ; ++i) {
 
 		do {
@@ -270,6 +271,7 @@ int main(void) {
     	}
 
 	//-------------------------------------------------------------------------------------------------------------
+	JUGAR:
 	cargaMatriz(tablero);
 	pantallaCarga();
 	printf("Para salir del juego en cualquier momento, ingrese -1 \n");
@@ -300,16 +302,16 @@ int main(void) {
 		if (endgame == false) {
 
 			ingresarFichas(tablero, turno, posicion);
-			victoria(tablero, turno);
-			turno = calcularTurno(turno);
+			estadoVictoria = victoria(tablero, turno);
+			calcularTurno(&turno);
 			mascara(tablero);
-			estadoVictoria = victoria(tablero,turno);
 
 		} else {
-			estadoVictoria = true;
+
+			estadoVictoria = 1;
+
 		}
 	
-
 	} while ( !estadoVictoria );
 
 
@@ -460,14 +462,14 @@ void ingresarFichas(int tablero[][COLUMNAS], int turno, int pos) {
 	return;
 }
 
-int calcularTurno(int turnoInput) {
-	int outputTurno;
-	if (turnoInput == 1) {
-		outputTurno = 2;
+void calcularTurno(int *turnoInput) {
+
+	if (*turnoInput == 1) {
+		*turnoInput = 2;
 	} else {
-		outputTurno = 1;
+		*turnoInput = 1;
 	}
-	return outputTurno;
+
 }
 
 void cargaMatriz(int inputMatriz[][COLUMNAS]) {
@@ -533,7 +535,7 @@ void mascara(int inputMatriz[][COLUMNAS]) {
 
 }
 
-bool victoria(int inputMatriz[][COLUMNAS],int turno) {
+int victoria(int inputMatriz[][COLUMNAS],int turno) {
 	// recorrido horizontal
 
 	bool victoria 	= false;
@@ -542,149 +544,49 @@ bool victoria(int inputMatriz[][COLUMNAS],int turno) {
 	int i 		= 0;
 	int j 		= 0;	
 	int k 		= 0; // <-- borrar para entrega
+	int l		= 0;
 
-	for (i=0;i<FILAS && !victoria;i++) {
+	for (i = 0; i < FILAS ; i++) {
 
-		c1 	= 0;
-		c2 	= 0;
+		for (j = 0; j<COLUMNAS - 3; j++) {
 
-		for (j=0;j<FILAS;j++) {
+			if (  inputMatriz[i][j] == turno && inputMatriz[i][j+1] == turno && inputMatriz[i][j+2] == turno && inputMatriz[i][j+3] == turno   ) {
 
-			if (inputMatriz[i][j] != 0 && inputMatriz[i][j] == 1) {
-
-				c1++;
-
-				if (inputMatriz[i][j+1] == 1) {
-
-					c1++;
-					j++;
-
-				} else {
-
-					c1 = 0;
-
-				}
-
-			} else if (inputMatriz[i][j] == 2) {
-
-				c2++;
-
-				if (inputMatriz[i][j+1] == 2) {
-
-					c2++;
-					j++;
-
-				} else {
-
-					c2 = 0;
-
-				}
-
+				return victoria = true;	
 			}
-
-			if (c1 >= 4 || c2 >= 4) {
-
-				printf("Valor de c1: %d \n", c1);
-				printf("Valor de c2: %d \n", c2);
-				victoria = true;
-				printf("[VICTORIA_F]: La siguiente fila cumple con la condicion de victoria: \n");
-
-				for (k=0;k<FILAS; k++) {
-
-					printf("%d \t", inputMatriz[i][k]);
-
-				}
-				printf("\n");
-			}
-
+		
 		}
-
-	}
-
-	if (victoria) {
-		return victoria;
 	}
 
 
-	// comprobacion en vertical
-	c1 = 0;
-	c2 = 0;
-	j = 0;
-	i = 0;
-	k = 0;
+	
+	for (i = 0; i < FILAS - 3; i++) {
 
-	for (i=0;i<FILAS && !victoria;i++) {
+		for (j = 0; j < COLUMNAS; j++) {
+	
+			if ( inputMatriz[i][j] == turno && inputMatriz[i+1][j] == turno && inputMatriz[i+2][j] == turno && inputMatriz[i+3][j] == turno ) {
 
-		for (j=0;j<COLUMNAS;j++) {
-
-			if (inputMatriz[j][i] != 0 && inputMatriz[j][i] == 1 ) {
-
-				c1++;
-
-				if (inputMatriz[j+1][i] == 1) {
-
-					c1++;
-					j++;
-
-				} else {
-
-					c1 = 0;
-
-				}
-
-			} else if (inputMatriz[j][i] == 2 ) {
-
-				c2++;
-
-				if (inputMatriz[j+1][i] == 2) {
-
-					c2++;
-					j++;
-
-				} else {
-
-					c2 = 0;
-
-				}
+				return victoria = true;	
+				printf("GANADOR: %d \n", turno);
 			}
-
+	
 
 		}
-
-
-		if (c1 >= 4 || c2 >= 4) {
-			victoria = true;
-			printf("Condicion de victoria dentro de una COLUMNA \n");
-			for (k=0;k<COLUMNAS;k++) {
-				printf("Fila %d: %d \n", k, inputMatriz[k][i]);
-			}
-		}
-
 	}
+	
 	c1 	= 0;
 	c2 	= 0;
-
-
-	/*
-		while(flag) {
-
-			for (i=inicio;i<control;i++) {
-
-				for (j=0;j<orden;j++) {
-
-
-
-				}
-
-			}
-		}
-	*/
+	victoria = false;
 	//recorido diagonal
 	for (int i = 0; i < FILAS - 3; i++) {
 		for (int j = 0; j < COLUMNAS - 3; j++) {
-			if (inputMatriz[i][j] == turno && inputMatriz[i+1][j+1] == turno &&
-				inputMatriz[i+2][j+2] == turno && inputMatriz[i+3][j+3] == turno) {
-				victoria = true;
+			turno = 1; 
+			if ( (inputMatriz[i][j] == turno && inputMatriz[i+1][j+1] == turno) && (inputMatriz[i+2][j+2] == turno && inputMatriz[i+3][j+3] == turno) ) {
+
+				return victoria = true;
+				printf("inputMatrizNormal: %d ,inputMatriz+1: %d \n ", inputMatriz[i][j], inputMatriz[i+1][j+1]);
+				printf("inputMatrizNormal: %d ,inputMatriz+1: %d \n ", inputMatriz[i+2][j+2], inputMatriz[i+3][j+3]);
+
 				}
 		}
 	}
@@ -697,13 +599,10 @@ bool victoria(int inputMatriz[][COLUMNAS],int turno) {
 			if (inputMatriz[i][j] == turno && inputMatriz[i-1][j+1] == turno &&
 
 				inputMatriz[i-2][j+2] == turno && inputMatriz[i-3][j+3] == turno) {
-				victoria = true;
+				return victoria = true;
 
 				}
-
 		}
-
-		return victoria;
 
 	}
 
