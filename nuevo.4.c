@@ -67,6 +67,7 @@ int main(void) {
 		printf("Ingrese cantidad de jugadores: ");
 		scanf("%d",&cantPlayers);
 		vaciarStdin();
+
 		if (cantPlayers < 2 || cantPlayers > 900) {
 			printf("La cantidad de jugadores debe estar entre 2 y 900! \n");
 		}
@@ -355,7 +356,6 @@ bool contieneNumeros(char* inputStr) {
 
         return tieneNumeros;
 }
-
 
 void vaciarStdin(void) {
 	
