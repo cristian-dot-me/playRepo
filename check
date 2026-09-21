@@ -16,9 +16,7 @@ agredado->	FUNCION: contieneNumeros() agarra un char y te devuelve
 		A diferencia de limpiarSiDesbordo(), este pide un 
 		getchar() si el buffer esta verdaderamente vacio
 		pero funcionan distinto, por que? No se
+	->	Ahora victoria() verifica si se encuentra un 
+		empate (tablero lleno)
 
-Arreglar urgente:
 
-	La funcion validarUser() provoca un SEGFAULT en la segunda vuelta 
-	de su loop principal. (Arreglado temporalmente cambiando los valores
-	de salida de la funcion)

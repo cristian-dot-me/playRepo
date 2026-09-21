@@ -11,15 +11,15 @@
 
 typedef struct {
 
-    int idplayer;
-    char Player[11];
-    char Password[11];
-    int Streak;
-    int Victory;
-    int PMatches;
-    int GameCount;
+	int idplayer;
+	char Player[11];
+	char Password[11];
+	int Streak;
+	int Victory;
+	int PMatches;
+	int GameCount;
 
-}PLAYERS;
+} PLAYERS;
 
 void 	limpiarSiDesbordo(char *buf);
 int 	validarID(int id,PLAYERS players[],int cantPlayers);
@@ -28,7 +28,7 @@ int 	validarString(char *InputStr);
 void 	Passworduser(char *inputstr, char *inputstr2,int cantPlayers,PLAYERS player[]);
 void 	calcularTurno(int *turnoInput);
 int	ingresarFichas(int tablero[][COLUMNAS], int turno, int pos);
-void 	mascara(int inputMatriz[][COLUMNAS], int cantMov1, int cantMov2); 
+void 	mascara(int inputMatriz[][COLUMNAS], int cantMov1, int cantMov2);
 void 	cargaMatriz(int inputMatriz[][COLUMNAS]);
 void 	pantallaCarga(void);
 int 	victoria(int inputMatriz[][COLUMNAS],int turno);
@@ -40,48 +40,76 @@ int main(void) {
 
 
 	int tablero[FILAS][COLUMNAS];
-	int ubicacion[2]={-1,-2};
+	int ubicacion[2]= {-1,-2};
 	int turno;
 	int posicion;
 	int cantPlayers;
 	int valido;
 	int validar;
 	int ub;
-	int mov1 = 0;
-	int mov2 = 0;
-	int estadoFichas = 0;
-
+	int mov1 		= 0;
+	int mov2 		= 0;
+	int estadoFichas 	= 0;
 	//----------------------auxiliares para la carga del jugador---------------
 	int id;
 	char charID[5];
-	char aux[100];                              //<- char para validar las cadenas
+	char aux[100];                           //<- char para validar las cadenas
 	char aux2[100];
-
+	char charCantPlayers[5];
 	//------------------------------------Banderas------------------------------
 	int b1;
 	int b2;
 	bool estadoLectura 	= false;
 	int estadoVictoria 	= 0;
 	bool endgame		= false;
-	//-------------------------------------------------------------------------------------------------------------
+	bool primeraVez		= true;
+	//--------------------------------------------------------------------------
 	//CANTIDAD DE JUGADORES A INGRESAR AL JUEGO"
 	bannerPrincipal();
 
 	printf("Bienvenido! Por favor, ingresa la cantidad de jugadores \n");
 	do {
 
-		printf("Ingrese cantidad de jugadores: ");
-		scanf("%d",&cantPlayers);
-		vaciarStdin();
-		if (cantPlayers < 2 || cantPlayers > 900) {
-			printf("La cantidad de jugadores debe estar entre 2 y 900! \n");
+		if (primeraVez) {
+			printf("Ingrese cantidad de jugadores: ");
+			primeraVez = false;
 		}
+
+		fgets(charCantPlayers, sizeof(charCantPlayers), stdin);
+		limpiarSiDesbordo(charCantPlayers);
+		printf("charCantPlayers: %s \n", charCantPlayers);
+		printf("strlen: %d \n", strlen(charCantPlayers));
+
+		if ( strlen(charCantPlayers) >= 1 && strcmp(charCantPlayers, " ") != 0 && strcmp(charCantPlayers, "\n") != 0 ) {
+			
+			
+			if (!contieneNumeros(charCantPlayers)) {
+
+				printf("Solo se pueden ingresar numeros del 2 hasta el 900. \n");
+				printf("Por favor, ingrese una cantidad de jugadores: ");
+
+			} else {
+
+				cantPlayers = strtol(charCantPlayers, NULL, 10);
+				if (cantPlayers < 2 || cantPlayers > 900) {
+					printf("La cantidad de jugadores debe estar entre 2 y 900! \n");
+					printf("Por favor, ingrese una cantidad de jugadores: ");
+				}
+
+			}
+
+		} else {
+
+			printf("Por favor, ingrese una cantidad de jugadores: ");
+		}
+
+
 
 	} while (cantPlayers < 2 || cantPlayers > 900);
 
 	// DEFINIMOS EL VECTOR DE JUGADORES
 	PLAYERS players[cantPlayers];
-	
+
 	printf("\n");
 	printf("\t    --------Registro de jugadores--------- \n ");
 	printf("Por favor complete los campos para registrar a los jugadores \n \n");
@@ -94,7 +122,7 @@ int main(void) {
 
 			if (i != 0) {
 				fflush(stdin);
-			} 
+			}
 
 			printf("Ingrese ID del jugador %d: ", i+1);
 
@@ -104,10 +132,10 @@ int main(void) {
 			if ( strlen(charID) > 1 ) {
 
 				estadoLectura = 1;
-				id = strtol(charID, NULL, 10); 
+				id = strtol(charID, NULL, 10);
 
 			} else {
-				
+
 				printf("No se pueden meter ID's vacias! \n");
 				estadoLectura = 0;
 
@@ -133,7 +161,7 @@ int main(void) {
 				}
 
 				vaciarStdin();
-	
+
 			}
 
 		} while ( id < 100 || id > 999 || validarID(id,players,cantPlayers));
@@ -143,7 +171,6 @@ int main(void) {
 
 		//-------------------------------------------- Nombre y contraseña ----------------------------------------------------------
 
-//		vaciarStdin();       
 		printf("Ingrese usuario: ");
 		fgets(aux,100,stdin);
 		limpiarSiDesbordo(aux);
@@ -163,32 +190,31 @@ int main(void) {
 
 			if (valido == 2) {
 
-			    printf("!!ERROR!! \n");
-			    printf("!Ingresar porfavor un usuario de hasta 10 caracteres \n");
-			    printf("Ingrese usuario: ");
-			    fgets(aux,100,stdin);
-			   limpiarSiDesbordo(aux);
+				printf("!!ERROR!! \n");
+				printf("!Ingresar porfavor un usuario de hasta 10 caracteres \n");
+				printf("Ingrese usuario: ");
+				fgets(aux,100,stdin);
+				limpiarSiDesbordo(aux);
 
 			}
-			    
-			    valido = validarString(aux);
 
-			      do {
-					validar = 0;
-			           validarUser(aux,players,cantPlayers,&validar,&ub);
+			valido = validarString(aux);
 
-			           if ( validar == 1 ){ 
+			do {
+				validar = 0;
+				validarUser(aux,players,cantPlayers,&validar,&ub);
 
-//					printf("Error! Usuario invalido \n");
-			               	printf("[ERROR]: Ese usuario ya existe \n");
-			               	printf("Ingrese OTRO nombre de usuario: ");
-			               	fgets(aux,100,stdin);
-			               	limpiarSiDesbordo(aux);
+				if ( validar == 1 ) {
+
+					printf("[ERROR]: Ese usuario ya existe \n");
+					printf("Ingrese OTRO nombre de usuario: ");
+					fgets(aux,100,stdin);
+					limpiarSiDesbordo(aux);
 					validarUser(aux, players, cantPlayers, &validar, &ub);
 
-			           }
+				}
 
-			     } while (validar == 1);
+			} while (validar == 1);
 
 		} while (valido == 1 || valido == 2);
 		///-------------------------------se asigna el valor de aux a players.player--------------------------------
@@ -198,236 +224,236 @@ int main(void) {
 		valido = 0;
 		printf("Ingrese contraseña del usuario: ");
 		fgets(aux,100,stdin);
-	      	limpiarSiDesbordo(aux);
+		limpiarSiDesbordo(aux);
 		fflush(stdin);
-		valido = validarString(aux);		
+		valido = validarString(aux);
 		do {
 			if (valido == 1) {
 				printf("!! ERROR !! \n");
 				printf("!! Campo vacio!! \n");
 				printf("Ingrese nuevamente: ");
 				fgets(aux,100,stdin);
-		         	limpiarSiDesbordo(aux);
+				limpiarSiDesbordo(aux);
 				valido=validarString(aux);
 			}
-			
-			//validacion de que la contraseña solo tenga 10 caracteres 		
-			if (valido == 2){
 
-			    printf("!!ERROR!! \n");
-			    printf("!Ingresar una contraseña de hasta 10 caracteres \n");
-			    printf("Ingrese contraseña del usuario: ");
-			    fgets(aux,100,stdin);
-			    limpiarSiDesbordo(aux);
+			//validacion de que la contraseña solo tenga 10 caracteres
+			if (valido == 2) {
+
+				printf("!!ERROR!! \n");
+				printf("!Ingresar una contraseña de hasta 10 caracteres \n");
+				printf("Ingrese contraseña del usuario: ");
+				fgets(aux,100,stdin);
+				limpiarSiDesbordo(aux);
 				fflush(stdin);
-			    valido=validarString(aux);
+				valido=validarString(aux);
 
 			}
-			
+
 		} while (valido == 1 || valido == 2);
 
-	//-------------------------------se asigna el valor de aux a players.password--------------------------------
+		//-------------------------------se asigna el valor de aux a players.password--------------------------------
 		strcpy(players[i].Password,aux);
 
 	}
 	//-------------------------------------------- start----------------------------------------------------------
-	
-	
-	
+
+
+
 	//---------------------------------------------Iniciar sesion--------------------------------------------------
 
 	printf("\n Ingresa los datos de los 2 usuario que van a jugar: \n");
-	do{
+	do {
 
-	for ( int i = 0 ; i < 2 ; i++){
+		for ( int i = 0 ; i < 2 ; i++) {
 
+			do {
+
+				printf("\nUsuario: ");
+				fgets(aux,100,stdin);
+				limpiarSiDesbordo(aux);
+				b1 = 0;
+				printf("\nContraseña:");
+				fgets(aux2,100,stdin);
+				limpiarSiDesbordo(aux2);
+				validar = 0;
+				validarUser(aux, players, cantPlayers, &validar, &ub);
+				ubicacion[i]=ub;
+
+				if (ubicacion[0]==ubicacion[1]) {
+					printf("Error \n");
+					printf("Ya esta logueado");
+				} else {
+
+					b1 = validar;
+
+					if (b1 == 0) {
+
+						printf("Error nombre de Usuario incorrecto \n");
+
+					}
+
+					if (b1 == 1 && strcmp(aux2, players[ub].Password) == 0) {
+
+						b2 = 1;
+
+					} else {
+
+						printf("Error: contraseña incorrecta \n");
+						b2 = 0;
+
+					}
+				}
+			} while(b1 == 0 || b2 == 0);
+			players[ubicacion[i]].PMatches++;
+		}
+
+
+
+		//-------------------------------------------------------------------------------------------------------------
+
+
+		cargaMatriz(tablero);
+		pantallaCarga();
+		printf("Para salir del juego en cualquier momento, ingrese -1 \n");
+		mascara(tablero, mov1, mov2);
+		turno = 1;
+		printf("\n");
+
+		// gameloop
 		do {
-			
-			printf("\nUsuario: ");
-			fgets(aux,100,stdin);
-			limpiarSiDesbordo(aux);         
-			b1 = 0;
-			printf("\nContraseña:");
-			fgets(aux2,100,stdin);
-        		limpiarSiDesbordo(aux2);
-			validar = 0;
-        		validarUser(aux, players, cantPlayers, &validar, &ub);
-        		ubicacion[i]=ub;
+			printf("\n -------TURNO DEL JUGADOR: %d ------- \n", turno);
+			printf("Ingrese posicion: ");
 
-        	if (ubicacion[0]==ubicacion[1]){
-        	    printf("Error \n");
-        	    printf("Ya esta logueado");
-		} else {
+			do {
+				scanf("%d", &posicion);
 
-        		b1 = validar;
+				if (posicion == -1) {
 
-			if (b1 == 0) {
+					endgame = true;
 
-				printf("Error nombre de Usuario incorrecto \n");
+				}
+				if ( (posicion < 1 || posicion > COLUMNAS) && endgame == false ) {
 
-			}
+					printf("Ingrese una posicion valida! \n Entre 1 y %d \n", COLUMNAS);
 
-			if (b1 == 1 && strcmp(aux2, players[ub].Password) == 0) {
+				}
 
-				b2 = 1;
+			} while ( (posicion < 1 || posicion > COLUMNAS) && endgame == false);
+
+			if (endgame == false) {
+
+				estadoFichas = ingresarFichas(tablero, turno, posicion);
+
+				if (estadoFichas == 1) {
+
+					if (turno == 1) {
+
+						mov1++;
+
+					} else {
+
+						mov2++;
+
+					}
+
+					estadoVictoria = victoria(tablero, turno);
+					calcularTurno(&turno);
+					mascara(tablero, mov1, mov2);
+
+				} else if (estadoFichas == 2) {
+
+					printf("La columna esta llena! \n");
+
+				}
 
 			} else {
 
-				printf("Error: contraseña incorrecta \n");
-				b2 = 0;
-
-         		}
-        	    }
-         	} while(b1 == 0 || b2 == 0);
-            players[ubicacion[i]].PMatches++;
-    	}
-
-
-
-	//-------------------------------------------------------------------------------------------------------------
-	
-
-	cargaMatriz(tablero);
-	pantallaCarga();
-	printf("Para salir del juego en cualquier momento, ingrese -1 \n");
-	mascara(tablero, mov1, mov2);
-	turno = 1;
-	printf("\n");
-
-	// gameloop
-	do {
-		printf("\n -------TURNO DEL JUGADOR: %d ------- \n", turno);
-		printf("Ingrese posicion: ");
-
-		do {
-			scanf("%d", &posicion);
-
-			if (posicion == -1) {
-
-				endgame = true;
-
-			}
-			if ( (posicion < 1 || posicion > COLUMNAS) && endgame == false ) {
-
-				printf("Ingrese una posicion valida! \n Entre 1 y %d \n", COLUMNAS);
-
+				estadoVictoria = 1;
 			}
 
-		} while ( (posicion < 1 || posicion > COLUMNAS) && endgame == false);
+		} while ( estadoVictoria == 0);
+		if (estadoVictoria == 1) {
 
-		if (endgame == false) {
-            
-			estadoFichas = ingresarFichas(tablero, turno, posicion);
+			if (turno == 1) {
 
-			if (estadoFichas == 1) {
+				printf("Jugador 2 ha ganado! \n");
 
-				if (turno == 1) {
+			} else {
 
-					mov1++;
+				printf("Jugador 1 ha ganado! \n");
 
-				} else {
-
-					mov2++;
-
-				}
-				
-				estadoVictoria = victoria(tablero, turno);
-				calcularTurno(&turno);
-				mascara(tablero, mov1, mov2);				
-
-			} else if (estadoFichas == 2){
-
-				printf("La columna esta llena! \n");
-		
 			}
-
-		} else {
-
-			estadoVictoria = 1;
-		}
-
-	} while ( estadoVictoria == 0);
-	if (estadoVictoria == 1) {
-
-		if (turno == 1) {
-
-			printf("Jugador 2 ha ganado! \n");
-
-		} else {
-
-			printf("Jugador 1 ha ganado! \n");
 
 		}
 
-	}
-	
-	//-------------------------------------Estadisticas------------------------------------------
+		//-------------------------------------Estadisticas------------------------------------------
 
-	if (estadoVictoria == 1) {
+		if (estadoVictoria == 1) {
 
-	     if(turno==2 && endgame){
-         
-	         players[ubicacion[0]].Victory++;
-         
-	       } else if(turno==1 && endgame){
-           
-	         players[ubicacion[1]].Victory++;
-         
-	     }
-     
-	     if (turno == 1 && estadoVictoria == 1) {
-     
-	            players[ubicacion[0]].Streak++;
-     
-	     } else {
-         
-	         players[ubicacion[0]].Streak = 0;
-         
-	     }
-     
-	     if (turno == 2 && estadoVictoria == 1) {
-    
-        	    players[ubicacion[1]].Streak++;
-     
-	     } else {
-         
-        	 players[ubicacion[1]].Streak = 0;
-         
-	     }
-     } else if (estadoVictoria == 2) {
-		printf("Se ha producido un empate! \n");
-	}
-     
-	     printf("Estadisticas \n");
-     
-    
-     
-	/*  
-        juego=bueno;
-        fps=muchos;
-        jugaores=muchos;
-        grafico=puedes correr crysys;
-        bugs = ninguno;
-        materias = promocionadas;
-	*/
-	    
-	}while(1);
-	
+			if(turno==2 && endgame) {
+
+				players[ubicacion[0]].Victory++;
+
+			} else if(turno==1 && endgame) {
+
+				players[ubicacion[1]].Victory++;
+
+			}
+
+			if (turno == 1 && estadoVictoria == 1) {
+
+				players[ubicacion[0]].Streak++;
+
+			} else {
+
+				players[ubicacion[0]].Streak = 0;
+
+			}
+
+			if (turno == 2 && estadoVictoria == 1) {
+
+				players[ubicacion[1]].Streak++;
+
+			} else {
+
+				players[ubicacion[1]].Streak = 0;
+
+			}
+		} else if (estadoVictoria == 2) {
+			printf("Se ha producido un empate! \n");
+		}
+
+		printf("Estadisticas \n");
+
+
+
+		/*
+		    juego=bueno;
+		    fps=muchos;
+		    jugaores=muchos;
+		    grafico=puedes correr crysys;
+		    bugs = ninguno;
+		    materias = promocionadas;
+		*/
+
+	} while(1);
+
 	return 0;
 }
 
 void bannerPrincipal(void) {
 
-        printf("\t_._______\n");
-        printf("\t| _______ |\n");
-        printf("\t||,-----.||\n");
-        printf("\t|||     |||\n");
-        printf("\t|||_____|||\n");
-        printf("\t|`-------'| \n");
-        printf("\t| +     O | \n");
-        printf("\t|      O  |\n");
-        printf("\t| / /  ##,\"\n");
-        printf("\t`------\"\n");
+	printf("\t_._______\n");
+	printf("\t| _______ |\n");
+	printf("\t||,-----.||\n");
+	printf("\t|||     |||\n");
+	printf("\t|||_____|||\n");
+	printf("\t|`-------'| \n");
+	printf("\t| +     O | \n");
+	printf("\t|      O  |\n");
+	printf("\t| / /  ##,\"\n");
+	printf("\t`------\"\n");
 	printf("grupo eleven \n");
 	printf("-> jpdd \n-> Xx_cvc_xX\n-> vea\n");
 
@@ -435,32 +461,32 @@ void bannerPrincipal(void) {
 
 bool contieneNumeros(char* inputStr) {
 
-        bool tieneNumeros = false;
+	bool tieneNumeros = false;
 
-        for(int i = 0 ; i<strlen(inputStr); i++) {
+	for(int i = 0 ; i<strlen(inputStr); i++) {
 
-                int status = isdigit(inputStr[i]);
+		int status = isdigit(inputStr[i]);
 
-                if (status) {
+		if (status) {
 
-                        tieneNumeros = true;
-                        i = strlen(inputStr);
+			tieneNumeros = true;
+			i = strlen(inputStr);
 
-                }
+		}
 
 
-        }
+	}
 
-        return tieneNumeros;
+	return tieneNumeros;
 }
 
 
 void vaciarStdin(void) {
-	
+
 	int hola;
 
-        while(  (hola = getchar()) != '\n' && hola != EOF);
-        return;
+	while(  (hola = getchar()) != '\n' && hola != EOF);
+	return;
 
 }
 
@@ -470,18 +496,20 @@ void limpiarSiDesbordo(char *buf) {
 
 	if (strchr(buf, '\n') == NULL) {
 		int c;
-	while ((c = getchar()) != '\n' && c != EOF);
+		while ((c = getchar()) != '\n' && c != EOF);
 	}
 	buf[strcspn(buf, "\n")] = '\0';
 }
 
 int validarString(char *InputStr) {
-   int valido;
-        if (strlen(InputStr)==1) {
-          valido=1;
-        }else if(strlen(InputStr)>11){
-            valido=2;
-        }else{valido=0;}
+	int valido;
+	if (strlen(InputStr)==1) {
+		valido=1;
+	} else if(strlen(InputStr)>11) {
+		valido=2;
+	} else {
+		valido=0;
+	}
 	return valido;
 
 }
@@ -503,8 +531,8 @@ int validarID(int id,PLAYERS players[],int cantPlayers) {
 		}
 	}
 	return validar;
-	
-	
+
+
 }
 
 void validarUser(char *inputstr, PLAYERS players[], int cantPlayers, int *validar1, int *ub) {
@@ -526,22 +554,22 @@ void validarUser(char *inputstr, PLAYERS players[], int cantPlayers, int *valida
 }
 
 
-void Passworduser(char *inputstr, char *inputstr2,int cantPlayers ,PLAYERS player[]){
-     for(int i=0;i<cantPlayers;i++){
-      if(inputstr==player[i].Player){
-                
-      }
-     }
-    
+void Passworduser(char *inputstr, char *inputstr2,int cantPlayers,PLAYERS player[]) {
+	for(int i=0; i<cantPlayers; i++) {
+		if(inputstr==player[i].Player) {
+
+		}
+	}
+
 }
 
 void pantallaCarga(void) {
 
 	printf("Cargando");
-	for(int i=0;i < 5;i++){
-	        printf(".");
+	for(int i=0; i < 5; i++) {
+		printf(".");
 		fflush(stdout);
-//		usleep(300000);
+		//		usleep(300000);
 	}
 
 
@@ -557,7 +585,7 @@ int ingresarFichas(int tablero[][COLUMNAS], int turno, int pos) {
 		for (int i = FILAS - 1; i >= 0 ; i--) {
 
 			if (tablero[i][pos2] == 0) {
-		    
+
 				tablero[i][pos2] = turno;
 				i = 0;
 
@@ -568,7 +596,7 @@ int ingresarFichas(int tablero[][COLUMNAS], int turno, int pos) {
 
 	} else {
 
-		estado = 2;	
+		estado = 2;
 	}
 	return estado;
 }
@@ -614,11 +642,11 @@ void mascara(int inputMatriz[][COLUMNAS], int cantMov1, int cantMov2) {
 
 			if (inputMatriz[i][j] == 0) {
 				printf(" ");
-			} else if (inputMatriz[i][j] == 1){
-//				printf("\x1b[31mX\x1b[37m");
+			} else if (inputMatriz[i][j] == 1) {
+				//				printf("\x1b[31mX\x1b[37m");
 				printf("X");
 			} else {
-//				printf("\x1b[32mO\x1b[37m");
+				//				printf("\x1b[32mO\x1b[37m");
 				printf("O");
 			}
 			printf("|");
@@ -648,11 +676,9 @@ int victoria(int inputMatriz[][COLUMNAS],int turno) {
 	// recorrido horizontal
 
 	int victoria 	= 0;
-	bool hayCeros 	= false; 
-	int c1 		= 0;
-	int c2	 	= 0;
+	bool hayCeros 	= false;
 	int i 		= 0;
-	int j 		= 0;	
+	int j 		= 0;
 
 	for (i = 0; i < FILAS ; i++) {
 
@@ -660,38 +686,36 @@ int victoria(int inputMatriz[][COLUMNAS],int turno) {
 
 			if (  inputMatriz[i][j] == turno && inputMatriz[i][j+1] == turno && inputMatriz[i][j+2] == turno && inputMatriz[i][j+3] == turno   ) {
 
-				victoria = 1;	
+				victoria = 1;
 			}
-		
+
 		}
 	}
 
 
-	
+
 	for (i = 0; i < FILAS - 3; i++) {
 
 		for (j = 0; j < COLUMNAS; j++) {
-	
+
 			if ( inputMatriz[i][j] == turno && inputMatriz[i+1][j] == turno && inputMatriz[i+2][j] == turno && inputMatriz[i+3][j] == turno ) {
 
-				victoria = 1;	
+				victoria = 1;
 			}
-	
+
 
 		}
 	}
-	
-	c1 	= 0;
-	c2 	= 0;
+
 	//recorido diagonal
 	for (int i = 0; i < FILAS - 3; i++) {
 		for (int j = 0; j < COLUMNAS - 3; j++) {
-			turno = 1; 
+			turno = 1;
 			if ( (inputMatriz[i][j] == turno && inputMatriz[i+1][j+1] == turno) && (inputMatriz[i+2][j+2] == turno && inputMatriz[i+3][j+3] == turno) ) {
 
 				victoria = 1;
 
-				}
+			}
 		}
 	}
 
@@ -702,27 +726,29 @@ int victoria(int inputMatriz[][COLUMNAS],int turno) {
 
 			if (inputMatriz[i][j] == turno && inputMatriz[i-1][j+1] == turno &&
 
-				inputMatriz[i-2][j+2] == turno && inputMatriz[i-3][j+3] == turno) {
+			        inputMatriz[i-2][j+2] == turno && inputMatriz[i-3][j+3] == turno) {
 				victoria = 1;
 
-				}
+			}
 		}
 
 	}
 
 	hayCeros = false;
+	if (victoria != 1) {
 
-	for (int i = 0 ; i < COLUMNAS ; i ++ ) {
+		for (int i = 0 ; i < COLUMNAS ; i ++ ) {
 
-		if (inputMatriz[0][i] == 0 ) {
-			hayCeros = true;
-			i = COLUMNAS;
+			if (inputMatriz[0][i] == 0 ) {
+				hayCeros = true;
+				i = COLUMNAS;
+			}
+
 		}
 
-	}
-	
-	if (!hayCeros) {
-		victoria = 2;
+		if (!hayCeros) {
+			victoria = 2;
+		}
 	}
 
 	return victoria;
