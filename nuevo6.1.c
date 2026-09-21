@@ -63,6 +63,8 @@ int main(void) {
 	int estadoVictoria 	= 0;
 	bool endgame		= false;
 	bool primeraVez		= true;
+	bool tieneNumeros	= false;
+	int valID		= 0;
 	//--------------------------------------------------------------------------
 	//CANTIDAD DE JUGADORES A INGRESAR AL JUEGO"
 	bannerPrincipal();
@@ -77,13 +79,11 @@ int main(void) {
 
 		fgets(charCantPlayers, sizeof(charCantPlayers), stdin);
 		limpiarSiDesbordo(charCantPlayers);
-		printf("charCantPlayers: %s \n", charCantPlayers);
-		printf("strlen: %d \n", strlen(charCantPlayers));
 
 		if ( strlen(charCantPlayers) >= 1 && strcmp(charCantPlayers, " ") != 0 && strcmp(charCantPlayers, "\n") != 0 ) {
 			
-			
-			if (!contieneNumeros(charCantPlayers)) {
+			tieneNumeros = contieneNumeros(charCantPlayers);
+			if (!tieneNumeros) {
 
 				printf("Solo se pueden ingresar numeros del 2 hasta el 900. \n");
 				printf("Por favor, ingrese una cantidad de jugadores: ");
@@ -149,8 +149,9 @@ int main(void) {
 			}
 
 			if ( (id < 100 || id > 999) && estadoLectura != 0 ) {
-
-				if ( !contieneNumeros(charID)  ) {
+				
+				tieneNumeros = contieneNumeros(charID);
+				if ( !tieneNumeros  ) {
 
 					printf("Solo se pueden ingresar numeros! \n");
 
@@ -163,8 +164,8 @@ int main(void) {
 				vaciarStdin();
 
 			}
-
-		} while ( id < 100 || id > 999 || validarID(id,players,cantPlayers));
+			valID = validarID(id,players,cantPlayers);
+		} while ( id < 100 || id > 999 || valID);
 
 		fflush(stdin);
 		players[i].idplayer = id;
