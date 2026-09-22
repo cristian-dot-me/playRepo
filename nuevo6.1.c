@@ -711,7 +711,6 @@ int victoria(int inputMatriz[][COLUMNAS],int turno) {
 	//recorido diagonal
 	for (int i = 0; i < FILAS - 3; i++) {
 		for (int j = 0; j < COLUMNAS - 3; j++) {
-			turno = 1;
 			if ( (inputMatriz[i][j] == turno && inputMatriz[i+1][j+1] == turno) && (inputMatriz[i+2][j+2] == turno && inputMatriz[i+3][j+3] == turno) ) {
 
 				victoria = 1;
