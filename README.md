@@ -1,7 +1,7 @@
 # playRepo
 el mejor 4 en raya  
 
-"You don't learn to walk by following rules. You learn by doing, and by falling over." — Richard Branson
+Progresar es tener un error distinto en cada iteracion
 
 Trabajo grupal de la materia de Fundamentos de la Programación
 
