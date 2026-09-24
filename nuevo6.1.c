@@ -94,6 +94,7 @@ int main(void) {
 			} else {
 
 				cantPlayers = strtol(charCantPlayers, NULL, 10);
+//ES MAS FÁCIL PREGUNTAR SI TIENE LETRAS XD
 				if (cantPlayers < 2 || cantPlayers > 900) {
 					printf("La cantidad de jugadores debe estar entre 2 y 900! \n");
 					printf("Por favor, ingrese una cantidad de jugadores: ");
