@@ -28,7 +28,7 @@ void 	validarUser(char *inputstr, PLAYERS players[], int cantPlayers, int *valid
 int 	validarString(char *InputStr);
 void 	Passworduser(char *inputstr, char *inputstr2,int cantPlayers,PLAYERS player[]);
 void 	calcularTurno(int *turnoInput);
-int	ingresarFichas(int tablero[][COLUMNAS], int turno, int pos);
+int		ingresarFichas(int tablero[][COLUMNAS], int turno, int pos);
 void 	mascara(int inputMatriz[][COLUMNAS], int cantMov1, int cantMov2);
 void 	cargaMatriz(int inputMatriz[][COLUMNAS]);
 void 	pantallaCarga(void);
@@ -36,7 +36,7 @@ int 	victoria(int inputMatriz[][COLUMNAS],int turno);
 void	vaciarStdin(void);
 void	bannerPrincipal(void);
 bool 	contieneNumeros(char* inputStr);
-bool 	tieneLetras(char* inputStr);
+bool 	contieneLetras(char* inputStr);
 
 
 int main(void) {
@@ -55,10 +55,10 @@ int main(void) {
 	int estadoFichas 	= 0;
 	//----------------------auxiliares para la carga del jugador---------------
 	int id;
-	char charID[5];
+	char charID[100];
 	char aux[100];                           //<- char para validar las cadenas
 	char aux2[100];
-	char charCantPlayers[5];
+	char charCantPlayers[100];
 	//------------------------------------Banderas------------------------------
 	int b1;
 	int b2;
@@ -67,43 +67,36 @@ int main(void) {
 	bool endgame		= false;
 	bool primeraVez		= true;
 	bool tieneNumeros	= false;
+	bool tieneLetras 	= false;
+
 	int valID		= 0;
 	//--------------------------------------------------------------------------
 	//CANTIDAD DE JUGADORES A INGRESAR AL JUEGO"
 	bannerPrincipal();
 
-	printf("Bienvenido! Por favor, ingresa la cantidad de jugadores \n");
+	printf("Bienvenido! Por favor, ingresa la cantidad de jugadores: \n");
 	do {
-
-		if (primeraVez) {
-			printf("Ingrese cantidad de jugadores: ");
-			primeraVez = false;
-		}
-
-		fgets(charCantPlayers, sizeof(charCantPlayers), stdin);
-		limpiarSiDesbordo(charCantPlayers);
+		
+		printf("Ingresa la cantidad de jugadores: ");
+		fgets(charCantPlayers, 100, stdin);
+		fflush(stdin);		
 
 		if ( strlen(charCantPlayers) >= 1 && strcmp(charCantPlayers, " ") != 0 && strcmp(charCantPlayers, "\n") != 0 ) {
 			
-			tieneNumeros = contieneNumeros(charCantPlayers);
-			if (!tieneNumeros) {
+			tieneNumeros 	= contieneNumeros(charCantPlayers);
+			tieneLetras		= contieneLetras(charCantPlayers);
 
-				printf("Solo se pueden ingresar numeros del 2 hasta el 900. \n");
-				printf("Por favor, ingrese una cantidad de jugadores: ");
 
-			} else {
-
+			if (tieneLetras) {
+				printf("No se pueden ingresar letras \n");
+				cantPlayers = -1;
+			} else if (tieneNumeros) {
 				cantPlayers = strtol(charCantPlayers, NULL, 10);
-				if (cantPlayers < 2 || cantPlayers > 900) {
-					printf("La cantidad de jugadores debe estar entre 2 y 900! \n");
-					printf("Por favor, ingrese una cantidad de jugadores: ");
-				}
-
 			}
+			
 
 		} else {
-
-			printf("Por favor, ingrese una cantidad de jugadores: ");
+			printf("No se pueden ingresar cantidades vacias! \n");
 		}
 
 
@@ -112,12 +105,15 @@ int main(void) {
 
 	// DEFINIMOS EL VECTOR DE JUGADORES
 	PLAYERS players[cantPlayers];
-
 	printf("\n");
 	printf("\t    --------Registro de jugadores--------- \n ");
 	printf("Por favor complete los campos para registrar a los jugadores \n \n");
 	printf("----------------------------------------------------------------- \n");
 	//Logeo y validacion de ingreso de id, usuario y contraseña
+
+	for (int i = 0 ; i < cantPlayers; i++) {
+		players[i].idplayer = -1;
+	}
 
 	for (int i = 0 ; i < cantPlayers ; ++i) {
 
@@ -128,47 +124,40 @@ int main(void) {
 			}
 
 			printf("Ingrese ID del jugador %d: ", i+1);
-
+			
 			fgets(charID, sizeof(charID), stdin);
 			fflush(stdin);
 
-			if ( strlen(charID) > 1 ) {
+			tieneLetras 	= contieneLetras(charID);
+			tieneNumeros 	= contieneNumeros(charID);
 
-				estadoLectura = 1;
+
+			if (tieneLetras) {
+
+				id = -1;
+
+			} else if (tieneNumeros){
+
 				id = strtol(charID, NULL, 10);
 
-			} else {
-
-				printf("No se pueden meter ID's vacias! \n");
-				estadoLectura = 0;
-
-			}
-
-			if (estadoLectura == 0) {
-
-				printf("No se ha ingresado un valor valido, intente de nuevo \n");
-				id = 0;
-
-			}
-
-			if ( (id < 100 || id > 999) && estadoLectura != 0 ) {
-				
-				tieneNumeros = contieneNumeros(charID);
-				if ( !tieneNumeros  ) {
-
-					printf("Solo se pueden ingresar numeros! \n");
-
-				} else {
-
-					printf("La ID debe ser de tres digitos! \n");
-
+				if (id < 100 || id > 999) {
+					printf("Solo se aceptan numeros de tres cifras! \n");
+					if (id > 999) 		// <- Si el numero ingresado es de 4 cifras, 
+						vaciarStdin(); 	// entonces lleno charID y hay que vaciar STDIN
 				}
-
-				vaciarStdin();
-
 			}
-			valID = validarID(id,players,cantPlayers);
-		} while ( id < 100 || id > 999 || valID);
+			
+			if (id != -1) {
+
+				valID = validarID(id,players,cantPlayers);
+
+			} else {
+				printf("Solo se pueden ingresar numeros! \n");
+				if (strlen(charID) == sizeof(charID)-1) 
+					vaciarStdin();						
+			}
+
+		} while ( (id < 100 || id > 999) || valID);
 
 		fflush(stdin);
 		players[i].idplayer = id;
@@ -257,7 +246,7 @@ int main(void) {
 		} while (valido == 1 || valido == 2);
 
 		//-------------------------------se asigna el valor de aux a players.password--------------------------------
-		strcpy(players[i].Password,aux);
+		strcpy(players[i].Password, aux);
 
 	}
 	//-------------------------------------------- start----------------------------------------------------------
@@ -446,13 +435,13 @@ int main(void) {
 	return 0;
 }
 
-bool tieneLetras(char* inputStr) {
+bool contieneLetras(char* inputStr) {
 
 	bool contieneLetras = false;
 
 	for(int i = 0 ; i<strlen(inputStr) && !contieneLetras; i++) {
 
-		contieneLetras = isalpha(inputStr[i])
+		contieneLetras = isalpha(inputStr[i]) | ispunct(inputStr[i]);
 
 	}
 
@@ -500,16 +489,15 @@ bool contieneNumeros(char* inputStr) {
 
 void vaciarStdin(void) {
 
-	int hola;
+	int c;
 
-	while(  (hola = getchar()) != '\n' && hola != EOF);
+	while(  (c = getchar()) != '\n' && c != EOF);
 	return;
 
 }
 
 
 void limpiarSiDesbordo(char *buf) {
-
 
 	if (strchr(buf, '\n') == NULL) {
 		int c;
@@ -534,6 +522,7 @@ int validarString(char *InputStr) {
 int validarID(int id,PLAYERS players[],int cantPlayers) {
 	int i;
 	int validar;
+	
 	for (i = 0; i<cantPlayers; i++) {
 
 		if (id == players[i].idplayer) {
