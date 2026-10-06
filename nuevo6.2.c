@@ -62,10 +62,8 @@ int main(void) {
 	//------------------------------------Banderas------------------------------
 	int b1;
 	int b2;
-	bool estadoLectura 	= false;
 	int estadoVictoria 	= 0;
 	bool endgame		= false;
-	bool primeraVez		= true;
 	bool tieneNumeros	= false;
 	bool tieneLetras 	= false;
 
@@ -450,6 +448,7 @@ bool contieneLetras(char* inputStr) {
 
 void bannerPrincipal(void) {
 
+	printf("\t¡4 en raya! \n");
 	printf("\t_._______\n");
 	printf("\t| _______ |\n");
 	printf("\t||,-----.||\n");
@@ -460,8 +459,11 @@ void bannerPrincipal(void) {
 	printf("\t|      O  |\n");
 	printf("\t| / /  ##,\"\n");
 	printf("\t`------\"\n");
-	printf("grupo eleven \n");
-	printf("-> jpdd \n-> Xx_cvc_xX\n-> vea\n");
+	printf("\n");
+	printf("\t< grupo 11 > \n");
+	printf("\t  < jpdd >\n\t  < cvc >\n\t  < vea >\n");
+	printf("\t    6.2 \n");
+	printf("\n");
 
 }
 
