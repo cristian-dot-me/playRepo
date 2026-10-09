@@ -8,7 +8,8 @@
 
 #define	FILAS 6
 #define COLUMNAS 7
-
+#define MAX_CHAR 100
+static int cantPlayers = 8;
 typedef enum { Pantalla_menu,Pantalla_Registro,Pantalla_InicionS,Pantalla_Juego,Pantalla_Estadisticas,Inicio}Pantalla;
 
 typedef struct {
@@ -42,7 +43,7 @@ int 	validarString(char *InputStr);
 void 	Passworduser(char *inputstr, char *inputstr2,int cantPlayers,PLAYERS player[]);
 void 	calcularTurno(int *turnoInput);
 int		ingresarFichas(int tablero[][COLUMNAS], int turno, int pos);
-
+void menu(int *menu);
 void 	cargaMatriz(int inputMatriz[][COLUMNAS]);
 void 	pantallaCarga(void);
 int 	victoria(int inputMatriz[][COLUMNAS],int turno);
@@ -52,6 +53,187 @@ void mascaraPrime(int tablero[][COLUMNAS], PLAYERS players[], int ub1, int ub2, 
 void	bannerPrincipal(void);
 bool 	contieneNumeros(char* inputStr);
 bool 	contieneLetras(char* inputStr);
+
+void menuF(int *menu, Pantalla *Pantalla) {
+
+	printf("Menu \n");
+	printf("1) Jugar \n");
+	printf("2) Iniciar secion \n");
+	printf("3) Registro \n");
+	printf("4) Estadisticas \n");
+	printf("5) Salir \n");
+			
+	scanf("%d",menu);
+	fflush(stdin);
+	vaciarStdin();
+	printf("menu: %d \n",*menu);
+	switch (*menu) {
+		case 1: *Pantalla = Pantalla_Juego;break;
+		case 2: *Pantalla = Pantalla_InicionS;break;
+		case 3: *Pantalla = Pantalla_Registro;break;
+		case 4: *Pantalla = Pantalla_Estadisticas;break;
+		case 5: *menu = 5; break;
+	} 
+	return;
+}
+void registroJ(int cantidadPlayers, PLAYERS players[], int ub ) {
+	int B1=-1;
+	char aux[100];
+	int validar = 0;
+	int valido = 0;
+	int auxbandera;
+				printf("\n");
+				printf("\t    --------Registro de jugadores--------- \n ");
+				printf("Por favor complete los campos para registrar a los jugadores \n \n");
+				printf("----------------------------------------------------------------- \n");
+				for ( int i = 0 ; i < cantidadPlayers && B1!=1; i++) {
+					printf("Ingrese usuario: ");
+					fgets(aux,100,stdin);
+					limpiarSiDesbordo(aux);
+
+					valido = validarString(aux);
+
+					do {
+						if (valido == 1) {
+
+							printf("%12 !! ERROR !! \n");
+							printf("!!Campo Vacio!! \n");
+							printf("Ingrese nueva mente el campo: ");
+							fgets(aux,100,stdin);
+							limpiarSiDesbordo(aux);
+
+						}
+
+						if (valido == 2) {
+
+							printf("!!ERROR!! \n");
+							printf("!Ingresar porfavor un usuario de hasta 10 caracteres \n");
+							printf("Ingrese usuario: ");
+							fgets(aux,100,stdin);
+							limpiarSiDesbordo(aux);
+
+						}
+
+						valido = validarString(aux);
+
+						do {
+							validar = 0;
+							validarUser(aux,players,cantidadPlayers,&validar,&ub);
+
+							if ( validar == 1 ) {
+
+								printf("[ERROR]: Ese usuario ya existe \n");
+								printf("Ingrese OTRO nombre de usuario: ");
+								fgets(aux,100,stdin);
+								limpiarSiDesbordo(aux);
+								validarUser(aux, players, cantidadPlayers, &validar, &ub);
+
+							}
+
+						} while (validar == 1);
+
+					} while (valido == 1 || valido == 2);
+					///-------------------------------se asigna el valor de aux a players.player--------------------------------
+					strcpy(players[i].Player,aux);
+
+
+					valido = 0;
+					printf("Ingrese contraseña del usuario: ");
+					fgets(aux,100,stdin);
+					limpiarSiDesbordo(aux);
+					fflush(stdin);
+					valido = validarString(aux);
+					do {
+						if (valido == 1) {
+							printf("!! ERROR !! \n");
+							printf("!! Campo vacio!! \n");
+							printf("Ingrese nuevamente: ");
+							fgets(aux,100,stdin);
+							limpiarSiDesbordo(aux);
+							valido=validarString(aux);
+						}
+
+						//validacion de que la contraseña solo tenga 10 caracteres
+						if (valido == 2) {
+
+							printf("!!ERROR!! \n");
+							printf("!Ingresar una contraseña de hasta 10 caracteres \n");
+							printf("Ingrese contraseña del usuario: ");
+							fgets(aux,100,stdin);
+							limpiarSiDesbordo(aux);
+							fflush(stdin);
+							valido=validarString(aux);
+
+						}
+
+					} while (valido == 1 || valido == 2);
+
+					//-------------------------------se asigna el valor de aux a players.password--------------------------------
+					strcpy(players[i].Password, aux);
+					if ( B1 == -1 && i>0 && cantidadPlayers > 2) {
+						printf("Si ya registraste a todos los jugadores coloca 1 para finalizar \n");
+						scanf("%d",&auxbandera);
+						fflush(stdin);
+						if (auxbandera == 1) {
+							B1 = 1;
+						}
+					}
+					players[i].idplayer = i+100;
+				}
+
+}
+void login(int ubicacion[], PLAYERS players[], Pantalla *Pantalla, bool *Bjuego) {
+	char aux[MAX_CHAR];
+	char aux2[MAX_CHAR];
+	int ub;
+	int validar;
+	int ub1;
+	int ub2;
+	bool b2;
+	bool b1;
+				printf("\n Ingresa los datos de los 2 usuario que van a jugar: \n");
+				for ( int i = 0 ; i < 2 ; i++) {
+					do {
+
+						printf("\nUsuario: ");
+						fgets(aux,100,stdin);
+						limpiarSiDesbordo(aux);
+						b1 = false;
+						printf("\nContraseña:");
+						fgets(aux2,100,stdin);
+						limpiarSiDesbordo(aux2);
+						validar = 0;
+						validarUser(aux, players, cantPlayers, &validar, &ub);
+						ubicacion[i]=ub;
+
+						if (ubicacion[0]==ubicacion[1]) {
+							printf("Error \n");
+							printf("Ya esta logueado");
+						} else {
+
+							b1 = validar;
+
+							if (b1 == false) {
+
+								printf("Error nombre de Usuario incorrecto \n");
+							}
+							if (b1 == true && strcmp(aux2, players[ub].Password) == 0) {
+								b2 = true;
+							} else {
+								printf("Error: contraseña incorrecta \n");
+								b2 = false;
+							}
+
+						}
+					} while(b1 == false || b2 == false);
+					players[ubicacion[i]].PMatches++;
+					ub1 = ubicacion[0];
+					ub2 = ubicacion[1];
+				}
+				*Bjuego = true;
+				*Pantalla = Pantalla_menu;
+
+}
 
 int main(void) {
 	PARTIDA partida;
@@ -70,7 +252,6 @@ int main(void) {
 	int ubicacion[2]= {-1,-2};
 	int turno;
 	int posicion;
-	int cantPlayers;
 	int valido;
 	int validar;
 	int ub;
@@ -87,7 +268,7 @@ int main(void) {
 	int auxbandera;
 	//------------------------------------Banderas------------------------------
 	
-	int B1=-1;
+
 	bool Bjuego = false;
 	bool estadoLectura 	= false;
 	int estadoVictoria 	= 0;
@@ -104,6 +285,7 @@ int main(void) {
 	//--------------------------------------------------------------------------
 	//CANTIDAD DE JUGADORES A INGRESAR AL JUEGO"
 	bannerPrincipal();
+	/*
 	printf("Bienvenido! Por favor, ingresa la cantidad de jugadores: \n");
 	do {
 		printf("Ingresa la cantidad de jugadores: ");
@@ -123,8 +305,9 @@ int main(void) {
 		}
 	} while (cantPlayers < 2 || cantPlayers > 900);
 
-
+	*/
 	PLAYERS players[cantPlayers];
+
 	for (int i = 0; i < cantPlayers; i++) {
 		players[i].GameCount = 0;
 		players[i].Victory = 0;
@@ -137,25 +320,11 @@ int main(void) {
 	do {
 		switch(Pantalla) {
 			case Pantalla_menu:
-				printf("Menu \n");
-				printf("1) Jugar \n");
-				printf("2) Iniciar secion \n");
-				printf("3) Registro \n");
-				printf("4) Estadisticas \n");
-				printf("5) Salir \n");
-			
-				scanf("%d",&menu);
-				fflush(stdin);
-				vaciarStdin();
-				printf("menu: %d \n",menu);
-				switch (menu) {
-					case 1: Pantalla= Pantalla_Juego;break;
-					case 2: Pantalla= Pantalla_InicionS;break;
-					case 3: Pantalla= Pantalla_Registro;break;
-					case 4: Pantalla= Pantalla_Estadisticas;break;
-					case 5: menu = 5; break;
-				}break;
-			case Pantalla_Registro:
+			menuF(&menu, &Pantalla);
+			break;
+		case Pantalla_Registro:
+				registroJ(cantPlayers, players, ub);
+				/*
 				printf("\n");
 				printf("\t    --------Registro de jugadores--------- \n ");
 				printf("Por favor complete los campos para registrar a los jugadores \n \n");
@@ -256,7 +425,10 @@ int main(void) {
 				}
 				Pantalla=Pantalla_menu;
 				break;
+				*/
 			case Pantalla_InicionS:
+				login(ubicacion, players, &Pantalla, &Bjuego);
+				/*
 				printf("\n Ingresa los datos de los 2 usuario que van a jugar: \n");
 				for ( int i = 0 ; i < 2 ; i++) {
 					do {
@@ -298,7 +470,9 @@ int main(void) {
 				}
 				Bjuego=1;
 				Pantalla=Pantalla_menu;
+				*/
 				break;
+				
 			case Pantalla_Juego:
 				if (Bjuego==1) {
 					//imprimir:
