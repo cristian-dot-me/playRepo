@@ -78,7 +78,8 @@ void menuF(int *menu, Pantalla *Pantalla) {
 	} 
 	return;
 }
-void registroJ(int cantidadPlayers, PLAYERS players[], int ub ) {
+void registroJ(int cantidadPlayers, PLAYERS players[]) {
+	int ub = 0;
 	int B1=-1;
 	char aux[100];
 	int validar = 0;
@@ -236,8 +237,9 @@ void login(PLAYERS players[], PARTIDA *partida, Pantalla *Pantalla, bool *Bjuego
 
 }
 
-void juego(PLAYERS players[], bool Bjuego, PARTIDA *partida, int tablero[][COLUMNAS], bool *endgame, Pantalla *Pantalla) {
+void juego(PLAYERS players[], bool Bjuego, PARTIDA *partida, int tablero[][COLUMNAS], Pantalla *Pantalla) {
 	
+			bool *endgame = false;
 			int estadoFichas;
 			bool estadoVictoria;
 			int ub1;
@@ -423,77 +425,38 @@ void estadisticas(PLAYERS players[], PARTIDA partida, int cantPlayers, Pantalla 
 }
 
 int main(void) {
-	PARTIDA partida;
-	
-	memset(&partida, sizeof(partida), 0);
+
+
+
+	PLAYERS players[cantPlayers];
+	int tablero[FILAS][COLUMNAS];
+	PARTIDA partida;	
 	partida.cantMov1 = 0;
 	partida.cantMov2 = 0;
 	partida.contador = 0;
 	partida.cantMovInv1 = 0;
 	partida.cantMovInv2 = 0;
 	partida.movTotales = 0;
-	int menu=-1;
-	int ub1 = 0;
-	int ub2 = 1;
-	int tablero[FILAS][COLUMNAS];
+	memset(&partida, sizeof(partida), 0);
+	// --------------------------------------------
+	int menu=-1; 
 
-	int turno;
-	int posicion;
-	int valido;
-	int validar;
-	int ub;
-	int mov1 		= 0;
-	int mov2 		= 0;
-	int estadoFichas 	= 0;
+
 	float porcVictorias;
-	//----------------------auxiliares para la carga del jugador---------------
-	int id;
-	char charID[100];
-	char aux[100];                           //<- char para validar las cadenas
-	char aux2[100];
-	char charCantPlayers[100];
-	int auxbandera;
-	//------------------------------------Banderas------------------------------
-	
 
 	bool Bjuego = false;
 	bool estadoLectura 	= false;
-	int estadoVictoria 	= 0;
 	bool endgame		= false;
 	bool primeraVez		= true;
 	bool tieneNumeros	= false;
 	bool tieneLetras 	= false;
-	bool b1;
-	bool b2;
 
-	int valID		= 0;
 	//	--------------------------------------------
 	Pantalla Pantalla=Pantalla_menu;
 	//--------------------------------------------------------------------------
 	//CANTIDAD DE JUGADORES A INGRESAR AL JUEGO"
 	bannerPrincipal();
-	/*
-	printf("Bienvenido! Por favor, ingresa la cantidad de jugadores: \n");
-	do {
-		printf("Ingresa la cantidad de jugadores: ");
-		fgets(charCantPlayers, 100, stdin);
-		fflush(stdin);
-		if ( strlen(charCantPlayers) >= 1 && strcmp(charCantPlayers, " ") != 0 && strcmp(charCantPlayers, "\n") != 0 ) {
-			tieneNumeros 	= contieneNumeros(charCantPlayers);
-			tieneLetras		= contieneLetras(charCantPlayers);
-			if (tieneLetras) {
-				printf("No se pueden ingresar letras \n");
-				cantPlayers = -1;
-			} else if (tieneNumeros) {
-				cantPlayers = strtol(charCantPlayers, NULL, 10);
-			}
-		} else {
-			printf("No se pueden ingresar cantidades vacias! \n");
-		}
-	} while (cantPlayers < 2 || cantPlayers > 900);
 
-	*/
-	PLAYERS players[cantPlayers];
 
 	for (int i = 0; i < cantPlayers; i++) {
 		players[i].GameCount = 0;
@@ -512,13 +475,13 @@ int main(void) {
 				menuF(&menu, &Pantalla);
 				break;
 			case Pantalla_Registro:
-				registroJ(cantPlayers, players, ub);
+				registroJ(cantPlayers, players);
 				break;
 			case Pantalla_InicionS:
 				login(players, &partida, &Pantalla, &Bjuego);
 				break;				
 			case Pantalla_Juego:
-				juego(players, Bjuego, &partida, tablero, &endgame, &Pantalla);
+				juego(players, Bjuego, &partida, tablero, &Pantalla);
 				break;
 			case Pantalla_Estadisticas:
 				estadisticas(players, partida, cantPlayers, &Pantalla);
