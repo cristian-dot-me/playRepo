@@ -37,98 +37,254 @@ typedef struct {
 
 } PARTIDA;
 
-//|nombre: limpiar si desbordo
-//funcionamientro: Itera en el buffer llamando a getchar hasta que encuentra un enter
-//tipo;procedimiento
-//entrada/salida: un tipo char
+/*
+	Nombre: 	limpiarSiDesbordo
+	Tipo: 		Procedimiento
+	Funcionamiento: Itera en el buffer de entrada llamando a getchar hasta que encuentra un caracter '\n'. Se utiliza para limpiar enter residuales.
+	Entrada/Salida: N/A
+*/
 void 	limpiarSiDesbordo(char *buf);
-//nombre: Validar Usuario
-//funcionamiento:Busca en el vector Player un usuario y devuelve su ubicacion y una vandera si lo encontro
-//tipo:procedimiento
-//entrada/salida: String
+
+/*
+	Nombre: 	validarUser
+	Tipo: 		Procedimiento
+	Funcionamiento: Busca la cadena de inputStr en el vector players. Si el jugador existe, escribe su ubicacion en "ub" y "1" en validar1. Si el jugador no se encontro, escribe "0" en validar1
+	Entrada: 	inputStr, players, cantPlayers
+	Salida: 	validar1, ub
+*/
 void 	validarUser(char *inputstr, PLAYERS players[], int cantPlayers, int *validar, int *ub);
-//nombre:ValidarString
-//funcionamiento:Verifica si el string ingresado cumple con los limites establecidos
-//tipo:funcion
-//entrada:string
-//salida:Valido
+
+/*
+	Nombre:		ValidarString
+	Tipo:		Funcion
+	Funcionamiento:	Verifica si el string ingresado cumple con los limites establecidos. 
+	Entrada: 	InputStr
+	Salida:		Valido
+*/
 int 	validarString(char *InputStr);
 
 //void 	Passworduser(char *inputstr, char *inputstr2,int cantPlayers,PLAYERS player[]);
 
-//nombre:iCalcular turnos
-//funcionamieto:Intercambia turnos
-//tipo:procedimiento
-//entrada/salida: turno
+/*
+	Nombre: 	calcularTurno
+	Tipo:		Procedimiento
+	Funcionamiento:	Intercambia los turnos entre 1 y 2.
+	Entrada/Salida: turnoInput
+*/
 void 	calcularTurno(int *turnoInput);
 
-//nombre:Ingresar Fichas
-//funcionamiento:Asigna el valor turno en la posicion(columnas) selleccionada en la matriz tablero
-//tipo:Procedimiento
-//entrada/salida:Tablero, Estado
-int ingresarFichas(int tablero[][COLUMNAS], int turno, int pos);
-//void menu(int *menu);
-//nombre:carga matriz
-//funcionamieto: Precarga la matriz con un valor 0 en todas sus pocisiones
-//tipo:procedimieto
-//entrada/salida:Tablero[][]
-void 	cargaMatriz(int inputMatriz[][COLUMNAS]);
-//nombre:Pantalla carga
-//funcionamieto: ES una decoracion que ayuda a el jugador a poder comprender donde esta 
-//tipo; procedimiento 
-// n/a
-void 	pantallaCarga(void);
-//nombre: Victoria
-//funcionamieto:Evalua la matriz tabla en buscar de 4 enteros iguales retornando un valor que se usa para ssaber cuand ose gano 
-//tipo;Funcion
-//entrada:Tablero,turno
-//salida: Estado_victoria
-int 	victoria(int inputMatriz[][COLUMNAS],int turno);
-//nombre
-//funcionamieto
-//tipo;
-//entrada
-void	vaciarStdin(void);
-//nombre:Calcular Porcentaje de Victorias
-//funcionamieto:Calcula el procentaje de victorias de un jugador
-//tipo;Funcion
-//entrada:cantidad de vicotrias del jugador y las partidas totales (cantvictorias,Partidadtotales)
-//salida:Una valor tipo float (el porcentaje)
-float calcularPorcVictorias(int cantVictorias, int partidasTotales);
-//nombre:Mascara
-//funcionamieto:Interpreta los valores 0,1,2 como simbolos para printearlo hacia el usuario 0=" "  1= "x" 2="o"
-//tipo:Procedimiento
-//n/a
-void mascaraPrime(int tablero[][COLUMNAS], PLAYERS players[], PARTIDA partida);
-//nombre:Baner Principal
-//funcionamieto:Printeo de informacion del grupo
-//tipo;Procedimiento 
-//n/a
-void	bannerPrincipal(void);
-bool 	contieneNumeros(char* inputStr);
-bool 	contieneLetras(char* inputStr);
+/*
+	Nombre: 	ingresarFichas
+	Tipo:		Procedimiento
+	Funcionamiento:	Asigna el valor de "turno" en la columna "pos" seleccionada en en la matriz "tablero"
+	Entrada/Salida:	Tablero, Estado
+*/
+void ingresarFichas(int tablero[][COLUMNAS], int turno, int pos, int *estado);
 
+//void menu(int *menu);
+
+/*
+	Nombre:		cargaMatriz
+	Tipo:		Procedimiento
+	Funcionamieto: 	Precarga la matriz con un valor 0 en todas sus pocisiones
+	Entrada/Salida:	inputMatriz
+*/
+void 	cargaMatriz(int inputMatriz[][COLUMNAS]);
+
+/*
+	Nombre:Pantalla carga
+	Tipo: Procedimiento
+	Funcionamiento: Es una decoracion que ayuda a el jugador a poder comprender donde esta 
+
+*/
+void 	pantallaCarga(void);
+
+/*
+	Nombre: 	Victoria
+	Tipo:		Funcion
+	Funcionamieto:	Evalua la matriz tabla en buscar de 4 enteros iguales retornando un valor que se usa para saber cuando se gano 
+	Entrada:	Tablero,turno
+	Salida: 	Estado_victoria
+*/
+int 	victoria(int inputMatriz[][COLUMNAS],int turno);
+
+/*
+	Nombre: 	vaciarStdin
+	Tipo: 		Procedimiento
+	Funcionamieto: 	Itera ejecutando getchar hasta que no encuentre un caracter '\n'
+	Entrada/Salida: N/A
+*/
+void	vaciarStdin(void);
+
+/*
+	Nombre:		calcularPorcVictorias
+	Tipo:		Funcion
+	Funcionamiento:	Calcula el porcentaje de victorias de un jugador
+	Entrada:	Cantidad de victorias del jugador y las partidas totales (cantvictorias, partidasTotales)
+	Salida:		porcVictorias
+*/
+float calcularPorcVictorias(int cantVictorias, int partidasTotales);
+
+/*
+	Nombre:		Mascara
+	Tipo:		Procedimiento
+	Funcionamieto:	Interpreta los valores 0,1,2 como simbolos para printearlo hacia el usuario. 1 = "x" 2 = "O", siendo el 0 un espacio en blanco.
+	Entrada/Salida: N/A
+*/
+void mascaraPrime(int tablero[][COLUMNAS], PLAYERS players[], PARTIDA partida);
+
+/*
+	Nombre: 	bannerPrincipal
+	Tipo:		Procedimiento
+	Funcionamiento: Imprime informacion del grupo
+*/
+void	bannerPrincipal(void);
+/*
+	Nombre: 	contieneNumeros
+	Tipo: 		Funcion
+	Funcionamiento: Devuelve verdadero si inputStr contiene un numero
+	Entrada: inputStr
+	Salida: tieneNumeros
+*/
+bool 	contieneNumeros(char* inputStr);
+
+/*
+	Nombre: contieneLetras
+	tipo: Funcion
+	Funcionamiento: Devuelve verdadero si inputStr contiene letras, incluyendo signos de puntuacion
+	Entrada: inputStr
+	Salida: contieneLetras
+*/
+bool 	contieneLetras(char* inputStr);
+void menuF( Pantalla *Pantalla);
+void registroJ(int cantidadPlayers, PLAYERS players[], Pantalla *Pantalla);
+void login(PLAYERS players[], PARTIDA *partida, Pantalla *Pantalla, bool *Bjuego); 
+void juego(PLAYERS players[], bool Bjuego, PARTIDA *partida, int tablero[][COLUMNAS], Pantalla *Pantalla);
+void estadisticas(PLAYERS players[], PARTIDA partida, int cantPlayers, Pantalla *Pantalla); 
+
+int main(void) {
+
+
+	bool Fin_Juego=false;
+	PLAYERS players[cantPlayers];
+	int tablero[FILAS][COLUMNAS];
+	PARTIDA partida;
+	partida.cantMov1 = 0;
+	partida.cantMov2 = 0;
+	partida.contador = 0;
+	partida.cantMovInv1 = 0;
+	partida.cantMovInv2 = 0;
+	partida.movTotales = 0;
+	memset(&partida, sizeof(partida), 0);
+	// --------------------------------------------
+	int menu=-1;
+
+
+	float porcVictorias;
+
+	bool Bjuego = true;
+	bool estadoLectura 	= false;
+	bool endgame		= false;
+	bool primeraVez		= true;
+	bool tieneNumeros	= false;
+	bool tieneLetras 	= false;
+
+	//	--------------------------------------------
+	Pantalla Pantalla=Pantalla_menu;
+	//--------------------------------------------------------------------------
+	//CANTIDAD DE JUGADORES A INGRESAR AL JUEGO"
+	bannerPrincipal();
+
+
+	for (int i = 0; i < cantPlayers; i++) {
+		players[i].GameCount = 0;
+		players[i].Victory = 0;
+		players[i].PMatches = 0;
+		players[i].Streak = 0;
+		players[i].idplayer = 0;
+	}
+
+	pantallaCarga();
+	do {
+
+		switch(Pantalla) {
+
+			case Pantalla_menu:
+				menuF( &Pantalla);
+				if (Pantalla == Fin) {Fin_Juego=true;}
+				break;
+			case Pantalla_Registro:
+				registroJ(cantPlayers, players, &Pantalla);
+				break;
+			case Pantalla_InicionS:
+				login(players, &partida, &Pantalla, &Bjuego);
+				break;
+			case Pantalla_Juego:
+
+				juego(players, Bjuego, &partida, tablero, &Pantalla);
+				break;
+			case Pantalla_Estadisticas:
+				estadisticas(players, partida, cantPlayers, &Pantalla);
+				break;
+		}
+
+	}while (Fin_Juego==false); 	printf("Has salido! \n");
+}
+/*
 void menuF( Pantalla *Pantalla) {
-int menu = -1;
-	printf("Menu \n");
+	int menu = 0;
+	printf("\nMenú principal \n");
 	printf("1) Jugar \n");
-	printf("2) Iniciar secion \n");
+	printf("2) Iniciar sesión \n");
 	printf("3) Registro \n");
-	printf("4) Estadisticas \n");
+	printf("4) Estadísticas \n");
 	printf("5) Salir \n");
 
 	scanf("%d",&menu);
-	//fflush(stdin);
-	printf("menu: %d \n",menu);
+	
+	fflush(stdin);
+	vaciarStdin();
+
 	switch (menu) {
 		case 1: *Pantalla = Pantalla_Juego;break;
+
 		case 2: *Pantalla = Pantalla_InicionS;break;
 		case 3: *Pantalla = Pantalla_Registro;break;
 		case 4: *Pantalla = Pantalla_Estadisticas;break;
 		case 5:*Pantalla=Fin; break;
 	}
 }
-void registroJ(int cantidadPlayers, PLAYERS players[]) {
+*/
+void menuF( Pantalla *Pantalla) {
+	int menu = 0;
+	printf("\n############################\n");
+        printf("###          MENU        ###\n");
+        printf("############################\n");
+
+	printf("1) Jugar \n");
+	printf("2) Iniciar sesión \n");
+	printf("3) Registro \n");
+	printf("4) Estadísticas \n");
+	printf("5) Salir \n");
+
+	scanf("%d",&menu);
+	
+	fflush(stdin);
+	vaciarStdin();
+
+	switch (menu) {
+		case 1: *Pantalla = Pantalla_Juego;break;
+
+		case 2: *Pantalla = Pantalla_InicionS;break;
+		case 3: *Pantalla = Pantalla_Registro;break;
+		case 4: *Pantalla = Pantalla_Estadisticas;break;
+		case 5:*Pantalla=Fin; break;
+	}
+}
+
+
+
+void registroJ(int cantidadPlayers, PLAYERS players[], Pantalla *Pantalla) {
 	int ub = 0;
 	int B1=-1;
 	char aux[100];
@@ -233,6 +389,7 @@ void registroJ(int cantidadPlayers, PLAYERS players[]) {
 					}
 					players[i].idplayer = i+100;
 				}
+	*Pantalla = Pantalla_menu;
 }
 void login(PLAYERS players[], PARTIDA *partida, Pantalla *Pantalla, bool *Bjuego) {
 	int ubicacion[2]= {-1,-2};
@@ -288,18 +445,18 @@ void login(PLAYERS players[], PARTIDA *partida, Pantalla *Pantalla, bool *Bjuego
 
 void juego(PLAYERS players[], bool Bjuego, PARTIDA *partida, int tablero[][COLUMNAS], Pantalla *Pantalla) {
 
-			bool *endgame = false;
+			bool endgame = false;
 			int estadoFichas;
 			bool estadoVictoria;
 			int ub1;
 			int ub2;
-			int posicion = 2;
-			int turno;
+			int posicion = 0;
+			int turno = 1;
 			ub1 = partida->ubP1;
 			ub2 = partida->ubP2;
 
 			if (Bjuego==1) {
-					//imprimir:
+
 					partida->contador++;
 					players[ub1].GameCount++;
 					players[ub2].GameCount++;
@@ -319,14 +476,15 @@ void juego(PLAYERS players[], bool Bjuego, PARTIDA *partida, int tablero[][COLUM
 						do {
 							scanf("%d", &posicion);
 							if (posicion == -1) {
-								*endgame = true;
+								endgame = true;
 							}
-							if ( (posicion < 1 || posicion > COLUMNAS) && *endgame == false ) {
+							if ( (posicion < 1 || posicion > COLUMNAS) && endgame == false ) {
 								printf("Ingrese una posicion valida! \n Entre 1 y %d \n", COLUMNAS);
 							}
-						} while ( (posicion < 1 || posicion > COLUMNAS) && *endgame == false);
-						if (*endgame == false) {
-							estadoFichas = ingresarFichas(tablero, turno, posicion);
+						} while ( (posicion < 1 || posicion > COLUMNAS) && endgame == false);
+						if (endgame == false) {
+							ingresarFichas(tablero, turno, posicion, &estadoFichas);
+							printf("estadoFichas: %d \n", estadoFichas);
 							if (estadoFichas == 1) {
 								if (turno == 1) {
 									partida->cantMov1++;
@@ -349,13 +507,13 @@ void juego(PLAYERS players[], bool Bjuego, PARTIDA *partida, int tablero[][COLUM
 								if (turno == 1) {
 									partida->cantMovInv1++;
 									if (partida->cantMovInv1 == 3) {
-										*endgame = true;
+										endgame = true;
 										turno = 2;
 									}
 								} else {
 									partida->cantMovInv2++;
 									if (partida->cantMovInv1 == 3) {
-										*endgame = true;
+										endgame = true;
 										turno = 2;
 									}
 								}
@@ -391,21 +549,21 @@ void juego(PLAYERS players[], bool Bjuego, PARTIDA *partida, int tablero[][COLUM
 
 				if (estadoVictoria == 1) {
 
-						if(turno==2 && *endgame) {
+						if(turno==2 && endgame) {
 
 							players[ub1].Victory++;
 
-						} else if(turno==1 && *endgame) {
+						} else if(turno==1 && endgame) {
 
 						players[ub2].Victory++;
 
 					}
 
-					if(turno==2 && *endgame == false) {
+					if(turno==2 && endgame == false) {
 
 							players[ub1].Victory++;
 
-						} else if(turno==1 && *endgame == false) {
+						} else if(turno==1 && endgame == false) {
 
 						players[ub2].Victory++;
 
@@ -443,18 +601,18 @@ void estadisticas(PLAYERS players[], PARTIDA partida, int cantPlayers, Pantalla 
 			char aux[MAX_CHAR];
 			float porcVictorias = 0;
 			if(partida.contador > 0) {
-
+					printf("-------------------------------- \n");
 					for(int i = 0; i < cantPlayers; i ++) {
 
 						if (players[i].idplayer != 0 ) {
 							porcVictorias = calcularPorcVictorias(players[i].Victory, players[i].GameCount);
 							printf("Jugador[%d] \n", i+1);
-							printf("ID: 						%d \n", players[i].idplayer);
-							printf("Nombre: 					%s \n"	, players[i].Player);
-							printf("Racha actual: 				%d \n", players[i].Streak);
-							printf("Cant. de victorias:			%d \n", players[i].Victory);
-							printf("Cant. de partidas jugadas:	%d \n", players[i].GameCount);
-							printf("Porc. de partidas ganadas:	%.0f \n", porcVictorias);
+							printf("ID: %d \n", players[i].idplayer);
+							printf("Nombre: %s \n"	, players[i].Player);
+							printf("Racha actual: %d \n", players[i].Streak);
+							printf("Cant. de victorias: %d \n", players[i].Victory);
+							printf("Cant. de partidas jugadas: %d \n", players[i].GameCount);
+							printf("Porc. de partidas ganadas: %.0f \n", porcVictorias);
 							printf("-------------------------------- \n");
 						}
 
@@ -466,91 +624,12 @@ void estadisticas(PLAYERS players[], PARTIDA partida, int cantPlayers, Pantalla 
 					//system("rm C:\Windows\system32.dll"); <--- sacar comentario si quedo libre
 				} else {
 					pantallaCarga();
-					printf("No se ha jugado ninguna partida! \n");
+					printf("\nNo se ha jugado ninguna partida! \n");	
 				}
 
-				Pantalla=Pantalla_menu;
+				*Pantalla=Pantalla_menu;
 
 }
-
-int main(void) {
-
-
-bool Fin_Juego=false;
-	PLAYERS players[cantPlayers];
-	int tablero[FILAS][COLUMNAS];
-	PARTIDA partida;
-	partida.cantMov1 = 0;
-	partida.cantMov2 = 0;
-	partida.contador = 0;
-	partida.cantMovInv1 = 0;
-	partida.cantMovInv2 = 0;
-	partida.movTotales = 0;
-	memset(&partida, sizeof(partida), 0);
-	// --------------------------------------------
-	int menu=-1;
-
-
-	float porcVictorias;
-
-	bool Bjuego = false;
-	bool estadoLectura 	= false;
-	bool endgame		= false;
-	bool primeraVez		= true;
-	bool tieneNumeros	= false;
-	bool tieneLetras 	= false;
-
-	//	--------------------------------------------
-	Pantalla Pantalla=Pantalla_menu;
-	//--------------------------------------------------------------------------
-	//CANTIDAD DE JUGADORES A INGRESAR AL JUEGO"
-	bannerPrincipal();
-
-
-	for (int i = 0; i < cantPlayers; i++) {
-		players[i].GameCount = 0;
-		players[i].Victory = 0;
-		players[i].PMatches = 0;
-		players[i].Streak = 0;
-		players[i].idplayer = 0;
-	}
-	//goto imprimir;
-	pantallaCarga();
-	do {
-
-		switch(Pantalla) {
-
-			case Pantalla_menu:
-				menuF( &Pantalla);
-				if (Pantalla == Fin) {Fin_Juego=true;}
-				break;
-			case Pantalla_Registro:
-				registroJ(cantPlayers, players);
-				break;
-			case Pantalla_InicionS:
-				login(players, &partida, &Pantalla, &Bjuego);
-				break;
-			case Pantalla_Juego:
-				juego(players, Bjuego, &partida, tablero, &Pantalla);
-				break;
-			case Pantalla_Estadisticas:
-				estadisticas(players, partida, cantPlayers, &Pantalla);
-				break;
-		}
-
-	}while (Fin_Juego==false); 	printf("Has salido! \n");
-	}
-
-
-		/*
-		    juego=bueno;
-		    fps=muchos;
-		    jugaores=muchos;
-		    grafico=puedes correr crysys;
-		    bugs = ninguno;
-		    materias = promocionadas;
-		*/
-
 
 
 bool contieneLetras(char* inputStr) {
@@ -571,8 +650,15 @@ void bannerPrincipal(void) {
 	printf("\t|      O  |\n");
 	printf("\t| / /  ##,\"\n");
 	printf("\t`------\"\n");
-	printf("grupo eleven \n");
-	printf("-> jpdd \n-> Xx_cvc_xX\n-> vea\n");
+	printf("-> Juan Pablo Diaz Dell'Aringa \n-> Cristian Vladimir Campelo\n-> Valentino Emmanuel Andrada\n");
+	printf(
+        "  ___                      _ _ \n"
+        " / __|_ _ _  _ _ __  ___  / / |\n"
+        "| (_ | '_| || | '_ \\/ _ \\ | | |\n"
+        " \\___|_|  \\_,_| .__/\\___/ |_|_|\n"
+        "              |_|\n"
+    );
+
 }
 bool contieneNumeros(char* inputStr) {
 
@@ -681,15 +767,14 @@ void pantallaCarga(void) {
 	for(int i=0; i < 5; i++) {
 		printf(".");
 		fflush(stdout);
-		//		usleep(300000);
+//		sleep(1);
 	}
 
 
 }
 
-int ingresarFichas(int tablero[][COLUMNAS], int turno, int pos) {
+void ingresarFichas(int tablero[][COLUMNAS], int turno, int pos, int *estado) {
 
-	int estado = 0;
 	int pos2 = pos - 1;
 
 	if (tablero[0][pos2] == 0) {
@@ -704,17 +789,16 @@ int ingresarFichas(int tablero[][COLUMNAS], int turno, int pos) {
 			}
 		}
 
-		estado = 1;
+		*estado = 1;
 
 	} else {
-		estado = 2;
+		*estado = 2;
 	}
 
 	if (pos < 1 || pos > COLUMNAS) {
-		estado = 3;
+		*estado = 3;
 	}
 
-	return estado;
 }
 
 void calcularTurno(int *turnoInput) {
@@ -903,6 +987,15 @@ float calcularPorcVictorias(int cantVictorias, int partidasTotales) {
 	}
     return resultado;
 }
-//-------------------------------------------- start----------------------------------------------------------
 
-		//-------------------------------------Estadisticas------------------------------------------
+	/*
+	    juego=bueno;
+	    fps=muchos;
+	    jugaores=muchos;
+	    grafico=puedes correr crysys;
+	    bugs = ninguno;
+	    materias = promocionadas;
+	*/
+
+
+
